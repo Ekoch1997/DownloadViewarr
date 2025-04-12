@@ -130,12 +130,12 @@ tr:hover {
     font-size: 12px;
     font-weight: bold;
     text-align: center;
-    color: white;
+    color: white !important;
 }
 
 .status-button.downloading {
     background-color: #b0e57c; /* Green for downloading */
-    color: #1a1a1a;
+    color: #1a1a1a !important;
 }
 
 .status-button.completed {
@@ -166,7 +166,7 @@ tr:hover {
     height: 18px;
     border-radius: 5px;
     line-height: 18px;
-    color: #1a1a1a;
+    color: white !important;
     font-weight: bold;
     font-size: 12px;
     display: flex;
@@ -180,6 +180,7 @@ tr:hover {
 /* Progress Bar Colors Based on Status */
 .progress-bar.downloading {
     background-color: #b0e57c; /* Green for downloading */
+    color: #1a1a1a !important;
 }
 
 .progress-bar.completed {

@@ -6,6 +6,9 @@
 
 DownloadViewarr is a Node.js application designed to fetch and display download queues for [Radarr](https://radarr.video/) and [Sonarr](https://sonarr.tv/). It provides a simple and user-friendly interface to view movies and TV show download queues via a web page.
 
+## Docker Image
+https://hub.docker.com/r/pir8radio/downloadviewarr
+
 ## Features
 
 - Fetches download queue data from Radarr and Sonarr using their APIs.

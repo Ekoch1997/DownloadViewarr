@@ -1,0 +1,15 @@
+name: downloadviewarr
+services:
+  downloadviewarr:
+    build: .
+    ports:
+      - "${NODE_SERVER_PORT:-8888}:${NODE_SERVER_PORT:-8888}" # Default to 8888 if NODE_SERVER_PORT is not set
+    environment:
+      RADARR_API_KEY: your_radarr_api_key
+      SONARR_API_KEY: your_sonarr_api_key
+      RADARR_SERVER_IP: your_radarr_server_ip
+      SONARR_SERVER_IP: your_sonarr_server_ip
+      RADARR_SERVER_PORT: 7878
+      SONARR_SERVER_PORT: 8989
+      NODE_SERVER_PORT: 8888
+    restart: unless-stopped

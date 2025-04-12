@@ -1,0 +1,259 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #e5a00d;
+}
+
+/* Table Container */
+.table-container {
+    overflow-x: auto;
+    border-radius: 5px;
+    margin-bottom: 15px; /* Adds space below the table */
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2a2a2a;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+    min-width: 110px;
+}
+
+th {
+    background-color: #333;
+    color: #f4f4f4;
+    position: sticky;
+    top: 0;
+    cursor: pointer;
+}
+
+tr:nth-child(even) {
+    background-color: #2a2a2a;
+}
+
+tr:nth-child(odd) {
+    background-color: #1f1f1f;
+}
+
+tr:hover {
+    background-color: #444;
+}
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #e5a00d; /* Matches the theme's golden accent */
+    border-radius: 6px;
+    border: 2px solid #2a2a2a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #f4b84a; /* Lighter golden accent on hover */
+}
+
+::-webkit-scrollbar-track {
+    background-color: #1a1a1a; /* Matches the background color */
+    border-radius: 6px;
+}
+
+/* Tab Button Styles (Movies and TV Shows) */
+#moviesButton, #tvShowsButton {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    color: #f4f4f4;
+    background-color: #333; /* Neutral dark background */
+    border: 1px solid #444;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+#moviesButton:hover, #tvShowsButton:hover {
+    background-color: #e5a00d; /* Gold hover effect */
+    color: #1a1a1a; /* Dark text for contrast */
+    border: 1px solid #e5a00d;
+}
+
+#moviesButton.active, #tvShowsButton.active {
+    background-color: #e5a00d; /* Gold for active tab */
+    color: #1a1a1a; /* Dark text for contrast */
+    border: 1px solid #e5a00d;
+}
+
+/* Button Styles for Quality and Formats (Unchanged) */
+.button {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    background-color: #007bff;
+}
+
+.quality {
+    background-color: #d3d3d3;
+    color: #1a1a1a;
+}
+
+/* Status Button Colors */
+.status-button {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+}
+
+.status-button.downloading {
+    background-color: #b0e57c; /* Green for downloading */
+    color: #1a1a1a;
+}
+
+.status-button.completed {
+    background-color: #3c67a3; /* Blue for completed */
+    color: #1a1a1a;
+}
+
+.status-button.warning {
+    background-color: #f27474; /* Red for warnings */
+    color: #1a1a1a;
+}
+
+.status-button.paused {
+    background-color: #d3d3d3; /* Grey for paused */
+    color: #1a1a1a;
+}
+
+/* Progress Bar */
+.progress {
+    width: 100%;
+    background-color: #333;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar {
+    height: 18px;
+    border-radius: 5px;
+    line-height: 18px;
+    color: #1a1a1a;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Progress Bar Colors Based on Status */
+.progress-bar.downloading {
+    background-color: #b0e57c; /* Green for downloading */
+}
+
+.progress-bar.completed {
+    background-color: #3c67a3; /* Blue for completed */
+}
+
+.progress-bar.warning {
+    background-color: #f27474; /* Red for warnings */
+}
+
+.progress-bar.paused {
+    background-color: #d3d3d3; /* Grey for paused */
+}
+
+/* Progress Bar Animation for Downloading */
+.progress-bar.downloading.animated::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.2), transparent);
+    animation: shine 1.5s infinite linear;
+}
+
+@keyframes shine {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Loader Styles */
+.loader-container {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    border: 2px solid #ff8c00;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.loader {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    background-color: #ff8c00;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+    margin-right: 10px;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.loader.stopped {
+    animation: none; /* LIVE button animation, if auto refresh doesnt work, live button goes dead so user knows there is stale data */
+    background-color: #333;
+}

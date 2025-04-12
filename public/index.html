@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Queue</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Download Queue</h1>
+
+    <div class="button-container">
+        <button id="moviesButton" class="themed-button active" onclick="switchTable('movies')">Movies</button>
+        <button id="tvShowsButton" class="themed-button" onclick="switchTable('tvshows')">TV Shows</button>
+    </div>
+
+    <div id="tableContainer" class="table-container">
+        <table id="myTable">
+            <thead>
+                <tr id="table-headers">
+                    <!-- Headers will be dynamically adjusted based on the selected table -->
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Rows will be dynamically populated by the client-side script -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="loader-container">
+        <div class="loader" id="loadingIcon"></div>
+        <div class="live-text">Live</div>
+    </div>
+    <script src="/scripts.js"></script>
+</body>
+</html>

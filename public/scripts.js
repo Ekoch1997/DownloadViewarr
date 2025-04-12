@@ -1,5 +1,22 @@
 let currentTable = 'movies'; // Default to Movies table
 let refreshInterval = null; // To store the interval ID
+let loaderTimeout = null; // To store the timeout ID for loader animation
+
+// Function to stop the loader animation
+function stopLoaderAnimation() {
+    const loader = document.getElementById('loadingIcon');
+    if (loader) {
+        loader.classList.add('stopped'); // Add the 'stopped' class to stop animation
+    }
+}
+
+// Function to reset the loader animation
+function resetLoaderAnimation() {
+    const loader = document.getElementById('loadingIcon');
+    if (loader) {
+        loader.classList.remove('stopped'); // Remove the 'stopped' class to restart animation
+    }
+}
 
 // Function to switch tables
 function switchTable(tableType) {
@@ -63,8 +80,19 @@ async function fetchAndPopulateTable() {
 
         // After populating the table, check for progress bar overflows
         checkOverflow();
+
+        // Reset the loader animation on successful data fetch
+        resetLoaderAnimation();
+
+        // Clear and restart the loader timeout
+        if (loaderTimeout) clearTimeout(loaderTimeout);
+        loaderTimeout = setTimeout(() => {
+            stopLoaderAnimation();
+        }, 12000); // Stop loader animation after 12 seconds if no refresh occurs
     } catch (error) {
         console.error('Error fetching and populating table:', error.message);
+        // Stop the loader animation in case of an error
+        stopLoaderAnimation();
     }
 }
 
@@ -153,11 +181,18 @@ function generateTableRows(data) {
 // Function to start refreshing data every 10 seconds
 function startDataRefresh() {
     if (refreshInterval) clearInterval(refreshInterval); // Clear any existing interval
+    if (loaderTimeout) clearTimeout(loaderTimeout); // Clear any existing timeout
 
     // Start a new interval to refresh data every 10 seconds
     refreshInterval = setInterval(() => {
         fetchAndPopulateTable();
-    }, 10000);
+
+        // Clear and restart the loader timeout
+        if (loaderTimeout) clearTimeout(loaderTimeout);
+        loaderTimeout = setTimeout(() => {
+            stopLoaderAnimation();
+        }, 12000); // Stop loader animation after 12 seconds if no refresh occurs
+    }, 10000); // 10 seconds
 }
 
 // Function to check for overflow and hide percentage text if needed

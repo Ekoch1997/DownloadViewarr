@@ -53,7 +53,7 @@ DownloadViewarr is a Node.js application designed to fetch and display download 
            apiServerPort: 8989,      // Sonarr server port
            apiKey: 'your_sonarr_api_key', // Sonarr API Key
        },
-       nodeServerPort: 8888 // Port to view download page
+       nodeServerPort: 8888 // Port to view download page on e.g. http://localhost:8888
    };
    ```
 

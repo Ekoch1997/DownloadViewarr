@@ -11,5 +11,9 @@
   "dependencies": {
     "express": "*",
     "axios": "*"
-  }
+  },
+  "files": [
+    "public",
+    "DownloadViewarr.js"
+  ]
 }

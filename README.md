@@ -1,3 +1,7 @@
+
+![image](https://github.com/user-attachments/assets/a25dba92-84d6-431d-abad-eb0777141d2d)
+
+
 # DownloadViewarr
 
 DownloadViewarr is a Node.js application designed to fetch and display download queues for [Radarr](https://radarr.video/) and [Sonarr](https://sonarr.tv/). It provides a simple and user-friendly interface to view movies and TV show download queues via a web page.

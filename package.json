@@ -1,0 +1,15 @@
+{
+  "name": "downloadviewarr",
+  "version": "1.0.0",
+  "description": "A Node.js application to fetch and display download queues for Radarr and Sonarr.",
+  "main": "DownloadViewarr.js",
+  "scripts": {
+    "start": "node DownloadViewarr.js"
+  },
+  "author": "pir8radio",
+  "license": "MIT",
+  "dependencies": {
+    "express": "*",
+    "axios": "*"
+  }
+}

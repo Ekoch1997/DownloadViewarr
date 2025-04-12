@@ -11,6 +11,7 @@ DownloadViewarr is a Node.js application designed to fetch and display download 
 - Fetches download queue data from Radarr and Sonarr using their APIs.
 - Displays data in an organized format on a web page.
 - Easy to configure and run locally.
+- Can be used by itself, or embeded as an iframe within ombi or some other request app.
 
 ## Installation
 

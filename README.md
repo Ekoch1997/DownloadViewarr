@@ -13,6 +13,17 @@ DownloadViewarr is a Node.js application designed to fetch and display download 
 - Easy to configure and run locally.
 - Can be used by itself, or embeded as an iframe within ombi or some other request app.
 
+## Screenshots
+- Standalone Webpage
+![image](https://github.com/user-attachments/assets/3484f6f5-9673-483d-83c0-1c15293b161b)
+
+- Embeded as a modal popup in Ombi (little cloud icon in the bottom right to bring it up)
+  This method requires some HTML/Javascript code to be added to the Ombi web UI on your end
+![image](https://github.com/user-attachments/assets/2a66fa2e-2c1a-45e0-968c-f8caf4be99c4)
+
+- Mobile Device - Embeded in Ombi
+![mobile](https://github.com/user-attachments/assets/89209dba-2153-4540-9409-813e6226a81b)
+
 ## Installation
 
 1. Clone the repository:

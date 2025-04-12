@@ -5,16 +5,16 @@ const app = express();
 /*==================================== SETTINGS =====================================*/
 const settings = {
     movies: {
-        apiServerIP: '127.0.0.1', 			// Radarr server IP
-        apiServerPort: 7878,        			// Radarr server port
-        apiKey: '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx', 	// Radarr API Key
+        apiServerIP: process.env.RADARR_SERVER_IP || '127.0.0.1',                    // Radarr server IP (Docker: from env var, Native: default to localhost)
+        apiServerPort: process.env.RADARR_SERVER_PORT || 7878,                       // Radarr server port
+        apiKey: process.env.RADARR_API_KEY || '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx',    // Radarr API Key
     },
     tvshows: {
-        apiServerIP: '127.0.0.1', 			// Sonarr server IP
-        apiServerPort: 8989,        			// Sonarr server port
-        apiKey: '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx', 	// Sonarr API Key
+        apiServerIP: process.env.SONARR_SERVER_IP || '127.0.0.1',                    // Sonarr server IP (Docker: from env var, Native: default to localhost)
+        apiServerPort: process.env.SONARR_SERVER_PORT || 8989,                       // Sonarr server port
+        apiKey: process.env.SONARR_API_KEY || '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx',    // Sonarr API Key
     },
-    nodeServerPort: 8888 				// Port to view download page
+    nodeServerPort: process.env.NODE_SERVER_PORT || 8888,                            // Port to view download page
 };
 /*==================================== SETTINGS =====================================*/
 

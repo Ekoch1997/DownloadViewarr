@@ -81,7 +81,7 @@ tr:hover {
 #moviesButton, #tvShowsButton {
     display: inline-block;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 5px 5px 0 0; /* Rounded top corners only */
     font-size: 14px;
     font-weight: bold;
     text-align: center;

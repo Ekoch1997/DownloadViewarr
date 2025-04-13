@@ -43,22 +43,22 @@ function updateTableHeaders() {
     const tableHeaders = document.getElementById('table-headers');
     if (currentTable === 'movies') {
         tableHeaders.innerHTML = `
-            <th onclick="sortTable(0)">Title <span class="sort-icon">&#x2b0d;</span></th>
-            <th onclick="sortTable(1)">Year <span class="sort-icon">&#x2b0d;</span></th>
-            <th onclick="sortTable(2)">Quality <span class="sort-icon">&#x2b0d;</span></th>
-            <th onclick="sortTable(3)">Formats <span class="sort-icon">&#x2b0d;</span></th>
-            <th onclick="sortTable(4)">Time Left <span class="sort-icon">&#x2b0d;</span></th>
-            <th onclick="sortTable(5)">Status <span class="sort-icon">&#x2b0d;</span></th>
-            <th>Progress</th>
+            <th onclick="sortTable(0)">Title</th>
+            <th onclick="sortTable(1)">Year</th>
+            <th onclick="sortTable(2)">Quality</th>
+            <th onclick="sortTable(3)">Formats</th>
+            <th onclick="sortTable(4)">Time Left</th>
+            <th onclick="sortTable(5)">Status</th>
+            <th onclick="sortTable(6)">Progress</th>
         `;
     } else if (currentTable === 'tvshows') {
         tableHeaders.innerHTML = `
-            <th onclick="sortTable(0)">Title <span class="sort-icon">&#x2b0d;</span></th>
-            <th onclick="sortTable(1)">Quality <span class="sort-icon">&#x2b0d;</span></th>
-            <th onclick="sortTable(2)">Formats <span class="sort-icon">&#x2b0d;</span></th>
-            <th onclick="sortTable(3)">Time Left <span class="sort-icon">&#x2b0d;</span></th>
-            <th onclick="sortTable(4)">Status <span class="sort-icon">&#x2b0d;</span></th>
-            <th>Progress</th>
+            <th onclick="sortTable(0)">Title</th>
+            <th onclick="sortTable(1)">Quality</th>
+            <th onclick="sortTable(2)">Formats</th>
+            <th onclick="sortTable(3)">Time Left</th>
+            <th onclick="sortTable(4)">Status</th>
+            <th onclick="sortTable(5)">Progress</th>
         `;
     }
 }
@@ -75,24 +75,29 @@ async function fetchAndPopulateTable() {
         const data = await response.json();
 
         // Get the current sorting state
-        const columnIndex = parseInt(localStorage.getItem('sortColumnIndex'), 10) || 0; // Default to first column
+        const columnIndex = parseInt(localStorage.getItem('sortColumnIndex'), 10); // Default to no sorting
         const isAscending = localStorage.getItem('sortOrder') === 'asc';
 
-        // Sort the data before rendering
-        data.sort((itemA, itemB) => {
-            const valueA = getColumnValue(itemA, columnIndex);
-            const valueB = getColumnValue(itemB, columnIndex);
+        // Sort the data before rendering if sorting is defined
+        if (!isNaN(columnIndex)) {
+            data.sort((itemA, itemB) => {
+                const valueA = getColumnValue(itemA, columnIndex);
+                const valueB = getColumnValue(itemB, columnIndex);
 
-            const compareResult = isNaN(valueA) || isNaN(valueB)
-                ? valueA.localeCompare(valueB, undefined, { numeric: true })
-                : parseFloat(valueA) - parseFloat(valueB);
+                const compareResult = isNaN(valueA) || isNaN(valueB)
+                    ? valueA.localeCompare(valueB, undefined, { numeric: true })
+                    : parseFloat(valueA) - parseFloat(valueB);
 
-            return isAscending ? compareResult : -compareResult;
-        });
+                return isAscending ? compareResult : -compareResult;
+            });
+        }
 
         // Generate table rows
         const tableBody = document.getElementById('table-body');
         tableBody.innerHTML = generateTableRows(data);
+
+        // Update header icons based on sorting state
+        updateHeaderIcons(columnIndex, isAscending);
 
         // After populating the table, check for progress bar overflows
         checkOverflow();
@@ -116,25 +121,49 @@ async function fetchAndPopulateTable() {
 function getColumnValue(item, columnIndex) {
     if (currentTable === 'movies') {
         switch (columnIndex) {
-            case 0: return item.movie?.title || '';
-            case 1: return item.movie?.year || '';
-            case 2: return item.quality?.quality?.name || '';
-            case 3: return item.customFormats?.map(format => format.name).join(', ') || '';
-            case 4: return item.timeleft || '';
-            case 5: return item.status || '';
-            default: return '';
+            case 0: 
+                return (item.movie?.title || '').toLowerCase(); // Title column
+            case 1: 
+                return item.movie?.year || ''; // Year column
+            case 2: 
+                return item.quality?.quality?.name || ''; // Quality column
+            case 3: 
+                return item.customFormats?.map(format => format.name).join(', ') || ''; // Formats column
+            case 4: 
+                return item.timeleft || ''; // Time Left column
+            case 5: 
+                return item.status || ''; // Status column
+            case 6: 
+                return calculateProgressPercentage(item); // Progress column
+            default: 
+                return '';
         }
     } else if (currentTable === 'tvshows') {
         switch (columnIndex) {
-            case 0: return item.title || '';
-            case 1: return item.quality?.quality?.name || '';
-            case 2: return item.customFormats?.map(format => format.name).join(', ') || '';
-            case 3: return item.timeleft || '';
-            case 4: return item.status || '';
-            default: return '';
+            case 0: 
+                return (item.title || '').toLowerCase(); // Title column
+            case 1: 
+                return item.quality?.quality?.name || ''; // Quality column
+            case 2: 
+                return item.customFormats?.map(format => format.name).join(', ') || ''; // Formats column
+            case 3: 
+                return item.timeleft || ''; // Time Left column
+            case 4: 
+                return item.status || ''; // Status column
+            case 5: 
+                return calculateProgressPercentage(item); // Progress column
+            default: 
+                return '';
         }
     }
     return '';
+}
+
+// Helper function to calculate progress percentage
+function calculateProgressPercentage(item) {
+    const size = item.size || 0;
+    const sizeLeft = item.sizeleft || 0;
+    return size ? ((size - sizeLeft) / size) * 100 : 0; // Return progress as a percentage
 }
 
 // Function to sort the table when a header is clicked
@@ -146,6 +175,21 @@ function sortTable(columnIndex) {
 
     // Fetch and refresh the table with the sorted data
     fetchAndPopulateTable();
+}
+
+// Function to update header icons based on sort state
+function updateHeaderIcons(columnIndex, isAscending) {
+    const headers = document.querySelectorAll('#table-headers th');
+
+    headers.forEach((header, index) => {
+        // Clear all icons first
+        header.textContent = header.textContent.replace(/[\u2191\u2193]/g, '').trim();
+
+        // Add the appropriate arrow for the sorted column
+        if (index === columnIndex) {
+            header.textContent += isAscending ? ' ↑' : ' ↓'; // Add ↑ for ascending, ↓ for descending
+        }
+    });
 }
 
 // Function to generate HTML for table rows
@@ -160,9 +204,7 @@ function generateTableRows(data) {
             const timeleft = item.timeleft || "-";
             const status = item.status || "-";
             const errorMessage = item.errorMessage || "No additional details available"; // Tooltip text
-            const size = item.size || 0;
-            const sizeLeft = item.sizeleft || 0;
-            const progressPercent = size ? ((size - sizeLeft) / size) * 100 : 0;
+            const progressPercent = calculateProgressPercentage(item);
 
             // Determine status button class based on status type
             const statusClass = status.toLowerCase();
@@ -197,10 +239,7 @@ function generateTableRows(data) {
                 : "-";
             const timeleft = item.timeleft || "-";
             const status = item.status || "-";
-            const errorMessage = item.errorMessage || "No additional details available"; // Tooltip text
-            const size = item.size || 0;
-            const sizeLeft = item.sizeleft || 0;
-            const progressPercent = size ? ((size - sizeLeft) / size) * 100 : 0;
+            const progressPercent = calculateProgressPercentage(item);
 
             // Determine status button class based on status type
             const statusClass = status.toLowerCase();
@@ -212,7 +251,7 @@ function generateTableRows(data) {
                     <td>${customFormats}</td>
                     <td class="timeleft">${timeleft}</td>
                     <td>
-                        <span class="status-button ${statusClass}" title="${errorMessage}">
+                        <span class="status-button ${statusClass}" title="${status}">
                             ${status}
                         </span>
                     </td>

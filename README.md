@@ -42,22 +42,24 @@ https://hub.docker.com/r/pir8radio/downloadviewarr
    npm install
    ```
 
-3. Configure the settings in the `DownloadViewarr.js` file:
+3. Configure the settings in the `DownloadViewarr.js` file or an env file:
 
    ```javascript
-   const settings = {
-       movies: {
-           apiServerIP: '127.0.0.1', // Radarr server IP
-           apiServerPort: 7878,      // Radarr server port
-           apiKey: 'your_radarr_api_key', // Radarr API Key
-       },
-       tvshows: {
-           apiServerIP: '127.0.0.1', // Sonarr server IP
-           apiServerPort: 8989,      // Sonarr server port
-           apiKey: 'your_sonarr_api_key', // Sonarr API Key
-       },
-       nodeServerPort: 8888 // Port to view download page on e.g. http://localhost:8888
-   };
+/*==================================== SETTINGS =====================================*/
+const settings = {
+    movies: {
+        apiServerIP: process.env.RADARR_SERVER_IP || '127.0.0.1',                    // Radarr server IP (Docker: from env var, Native: default to localhost)
+        apiServerPort: process.env.RADARR_SERVER_PORT || 7878,                       // Radarr server port
+        apiKey: process.env.RADARR_API_KEY || '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx',    // Radarr API Key
+    },
+    tvshows: {
+        apiServerIP: process.env.SONARR_SERVER_IP || '127.0.0.1',                    // Sonarr server IP (Docker: from env var, Native: default to localhost)
+        apiServerPort: process.env.SONARR_SERVER_PORT || 8989,                       // Sonarr server port
+        apiKey: process.env.SONARR_API_KEY || '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx',    // Sonarr API Key
+    },
+    nodeServerPort: process.env.NODE_SERVER_PORT || 8888,                            // Port to view download page
+};
+/*==================================== SETTINGS =====================================*/
    ```
 
 4. Start the application:

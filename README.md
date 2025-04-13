@@ -45,7 +45,7 @@ https://hub.docker.com/r/pir8radio/downloadviewarr
 3. Configure the settings in the `DownloadViewarr.js` file or an env file:
 
 ```javascript
-/==================================== SETTINGS =====================================*/
+/*==================================== SETTINGS =====================================*/
 const settings = {
     movies: {
         apiServerIP: process.env.RADARR_SERVER_IP || '127.0.0.1',                    // Radarr server IP (Docker: from env var, Native: default to localhost)

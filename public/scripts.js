@@ -74,6 +74,22 @@ async function fetchAndPopulateTable() {
         if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
         const data = await response.json();
 
+        // Get the current sorting state
+        const columnIndex = parseInt(localStorage.getItem('sortColumnIndex'), 10) || 0; // Default to first column
+        const isAscending = localStorage.getItem('sortOrder') === 'asc';
+
+        // Sort the data before rendering
+        data.sort((itemA, itemB) => {
+            const valueA = getColumnValue(itemA, columnIndex);
+            const valueB = getColumnValue(itemB, columnIndex);
+
+            const compareResult = isNaN(valueA) || isNaN(valueB)
+                ? valueA.localeCompare(valueB, undefined, { numeric: true })
+                : parseFloat(valueA) - parseFloat(valueB);
+
+            return isAscending ? compareResult : -compareResult;
+        });
+
         // Generate table rows
         const tableBody = document.getElementById('table-body');
         tableBody.innerHTML = generateTableRows(data);
@@ -94,6 +110,42 @@ async function fetchAndPopulateTable() {
         // Stop the loader animation in case of an error
         stopLoaderAnimation();
     }
+}
+
+// Helper function to extract column values for sorting
+function getColumnValue(item, columnIndex) {
+    if (currentTable === 'movies') {
+        switch (columnIndex) {
+            case 0: return item.movie?.title || '';
+            case 1: return item.movie?.year || '';
+            case 2: return item.quality?.quality?.name || '';
+            case 3: return item.customFormats?.map(format => format.name).join(', ') || '';
+            case 4: return item.timeleft || '';
+            case 5: return item.status || '';
+            default: return '';
+        }
+    } else if (currentTable === 'tvshows') {
+        switch (columnIndex) {
+            case 0: return item.title || '';
+            case 1: return item.quality?.quality?.name || '';
+            case 2: return item.customFormats?.map(format => format.name).join(', ') || '';
+            case 3: return item.timeleft || '';
+            case 4: return item.status || '';
+            default: return '';
+        }
+    }
+    return '';
+}
+
+// Function to sort the table when a header is clicked
+function sortTable(columnIndex) {
+    // Toggle the sort order
+    const isAscending = localStorage.getItem('sortOrder') !== 'asc';
+    localStorage.setItem('sortOrder', isAscending ? 'asc' : 'desc');
+    localStorage.setItem('sortColumnIndex', columnIndex);
+
+    // Fetch and refresh the table with the sorted data
+    fetchAndPopulateTable();
 }
 
 // Function to generate HTML for table rows

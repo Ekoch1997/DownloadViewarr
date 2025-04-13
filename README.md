@@ -73,7 +73,7 @@ const settings = {
    ```
    http://localhost:8888
    ```
-You can also link directly to either the Movies table or the TV Shows table by adding the table parameter on the url like so:
+   You can also link directly to either the Movies table or the TV Shows table by adding the table parameter on the url like so:
    ```
    http://localhost:8888/?table=tvshows
    ```

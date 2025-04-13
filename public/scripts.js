@@ -212,6 +212,17 @@ function checkOverflow() {
     });
 }
 
+// Function to monitor URL parameters and call switchTable once
+function monitorUrlParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tableParam = urlParams.get('table');
+    if (tableParam === 'movies') {
+        switchTable('movies');
+    } else if (tableParam === 'tvshows') {
+        switchTable('tvshows');
+    }
+}
+
 // Restore scroll positions on page load
 document.addEventListener('DOMContentLoaded', () => {
     // Restore the previous tab from localStorage
@@ -230,4 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start refreshing data every 10 seconds
     startDataRefresh();
+
+    // Monitor URL parameters for table switching
+    monitorUrlParameters();
 });

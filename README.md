@@ -15,7 +15,12 @@ https://hub.docker.com/r/pir8radio/downloadviewarr
 - Displays data in an organized format on a web page.
 - Easy to configure and run locally.
 - Can be used by itself, or embeded as an iframe within ombi or some other request app.
-
+- Embed into an existing page just add this line of code just above the </body> of whatever webpage you want to add it to.
+  * the color="#e5a00d" part is optional, you can make the floating button match your theme, leave the color part off and it will default to plex theme colors
+  ```html
+  <script src="http://<downloadviewarr ulr or IP>/downloadviewarr_button.js" downloadviewarr-url="http://<downloadviewarr ulr or IP>" color="#e5a00d"></script>
+  ```
+  
 ## Screenshots
 - Standalone Webpage
 ![image](https://github.com/user-attachments/assets/3484f6f5-9673-483d-83c0-1c15293b161b)

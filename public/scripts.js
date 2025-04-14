@@ -18,6 +18,15 @@ function resetLoaderAnimation() {
     }
 }
 
+// Function to monitor the URL parameters and set the correct tab
+function monitorTabFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const tableParam = params.get('table');
+    if (tableParam === 'movies' || tableParam === 'tvshows') {
+        switchTable(tableParam); // Correctly handle table=movies or table=tvshows
+    }
+}
+
 // Function to switch tables
 function switchTable(tableType) {
     currentTable = tableType;
@@ -63,16 +72,72 @@ function updateTableHeaders() {
     }
 }
 
+// Function to fetch data for both tables and update bubbles
+async function fetchBubbleCounts() {
+    try {
+        // Fetch data for Movies
+        const moviesResponse = await fetch('/api/queue/movies');
+        if (!moviesResponse.ok) throw new Error(`Failed to fetch movies data: ${moviesResponse.statusText}`);
+        const moviesData = await moviesResponse.json();
+        const moviesDownloadingCount = moviesData.filter(item => item.status.toLowerCase() === 'downloading').length;
+
+        // Update the Movies bubble
+        const moviesCountBubble = document.getElementById('moviesCount');
+        if (moviesDownloadingCount > 0) {
+            moviesCountBubble.textContent = moviesDownloadingCount;
+            moviesCountBubble.style.display = 'block';
+        } else {
+            moviesCountBubble.style.display = 'none';
+        }
+
+        // Fetch data for TV Shows
+        const tvShowsResponse = await fetch('/api/queue/tvshows');
+        if (!tvShowsResponse.ok) throw new Error(`Failed to fetch TV shows data: ${tvShowsResponse.statusText}`);
+        const tvShowsData = await tvShowsResponse.json();
+        const tvShowsDownloadingCount = tvShowsData.filter(item => item.status.toLowerCase() === 'downloading').length;
+
+        // Update the TV Shows bubble
+        const tvShowsCountBubble = document.getElementById('tvShowsCount');
+        if (tvShowsDownloadingCount > 0) {
+            tvShowsCountBubble.textContent = tvShowsDownloadingCount;
+            tvShowsCountBubble.style.display = 'block';
+        } else {
+            tvShowsCountBubble.style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error fetching bubble counts:', error.message);
+    }
+}
+
 // Function to fetch and populate the table with data
 async function fetchAndPopulateTable() {
     try {
-        // Determine the endpoint to fetch data from
         const endpoint = currentTable === 'movies' ? '/api/queue/movies' : '/api/queue/tvshows';
-
-        // Fetch data from the server-side endpoint
         const response = await fetch(endpoint);
         if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
         const data = await response.json();
+
+        // Count rows with a "downloading" status
+        const downloadingCount = data.filter(item => item.status.toLowerCase() === 'downloading').length;
+
+        // Update the count bubble for the appropriate tab
+        if (currentTable === 'movies') {
+            const moviesCountBubble = document.getElementById('moviesCount');
+            if (downloadingCount > 0) {
+                moviesCountBubble.textContent = downloadingCount;
+                moviesCountBubble.style.display = 'block';
+            } else {
+                moviesCountBubble.style.display = 'none';
+            }
+        } else if (currentTable === 'tvshows') {
+            const tvShowsCountBubble = document.getElementById('tvShowsCount');
+            if (downloadingCount > 0) {
+                tvShowsCountBubble.textContent = downloadingCount;
+                tvShowsCountBubble.style.display = 'block';
+            } else {
+                tvShowsCountBubble.style.display = 'none';
+            }
+        }
 
         // Get the current sorting state
         const columnIndex = parseInt(localStorage.getItem('sortColumnIndex'), 10); // Default to no sorting
@@ -112,9 +177,11 @@ async function fetchAndPopulateTable() {
         }, 12000); // Stop loader animation after 12 seconds if no refresh occurs
     } catch (error) {
         console.error('Error fetching and populating table:', error.message);
-        // Stop the loader animation in case of an error
         stopLoaderAnimation();
     }
+
+    // Update the count bubbles for both tabs
+    await fetchBubbleCounts();
 }
 
 // Helper function to extract column values for sorting
@@ -168,12 +235,10 @@ function calculateProgressPercentage(item) {
 
 // Function to sort the table when a header is clicked
 function sortTable(columnIndex) {
-    // Toggle the sort order
     const isAscending = localStorage.getItem('sortOrder') !== 'asc';
     localStorage.setItem('sortOrder', isAscending ? 'asc' : 'desc');
     localStorage.setItem('sortColumnIndex', columnIndex);
 
-    // Fetch and refresh the table with the sorted data
     fetchAndPopulateTable();
 }
 
@@ -198,16 +263,19 @@ function generateTableRows(data) {
         if (currentTable === 'movies') {
             const movie = item.movie || { title: "-", year: "-" };
             const quality = (item.quality && item.quality.quality && item.quality.quality.name) || "-";
-            const customFormats = item.customFormats && item.customFormats.length > 0
-                ? item.customFormats.map(format => `<span class="button">${format.name}</span>`).join(' ')
-                : "-";
+
+            // Handle custom formats properly
+            const customFormats = Array.isArray(item.customFormats) && item.customFormats.length > 0
+                ? item.customFormats.map(format => {
+                    const escapedName = format.name.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    return `<span class="button format-item" title="Format: ${escapedName}">${escapedName}</span>`;
+                }).join(' ')
+                : '<span class="no-formats">None</span>'; // Display "None" if no formats exist
+
             const timeleft = item.timeleft || "-";
             const status = item.status || "-";
             const errorMessage = item.errorMessage || "No additional details available"; // Tooltip text
             const progressPercent = calculateProgressPercentage(item);
-
-            // Determine status button class based on status type
-            const statusClass = status.toLowerCase();
 
             return `
                 <tr>
@@ -217,15 +285,14 @@ function generateTableRows(data) {
                     <td>${customFormats}</td>
                     <td class="timeleft">${timeleft}</td>
                     <td>
-                        <span class="status-button ${statusClass}" title="${errorMessage}">
+                        <span class="status-button ${status.toLowerCase()}" title="${errorMessage}">
                             ${status}
                         </span>
                     </td>
                     <td>
                         <div class="progress">
-                            <div class="progress-bar ${statusClass} ${statusClass === 'downloading' ? 'animated' : ''}" 
-                                 style="width: ${progressPercent}%" 
-                                 title="${progressPercent.toFixed(2)}%">
+                            <div class="progress-bar ${status.toLowerCase()}" 
+                                 style="width: ${progressPercent}%">
                                 <span class="text">${progressPercent.toFixed(2)}%</span>
                             </div>
                         </div>
@@ -234,15 +301,18 @@ function generateTableRows(data) {
         } else if (currentTable === 'tvshows') {
             const title = item.title || "-";
             const quality = (item.quality && item.quality.quality && item.quality.quality.name) || "-";
-            const customFormats = item.customFormats && item.customFormats.length > 0
-                ? item.customFormats.map(format => `<span class="button">${format.name}</span>`).join(' ')
-                : "-";
+
+            // Handle custom formats properly
+            const customFormats = Array.isArray(item.customFormats) && item.customFormats.length > 0
+                ? item.customFormats.map(format => {
+                    const escapedName = format.name.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    return `<span class="button format-item" title="Format: ${escapedName}">${escapedName}</span>`;
+                }).join(' ')
+                : '<span class="no-formats">None</span>'; // Display "None" if no formats exist
+
             const timeleft = item.timeleft || "-";
             const status = item.status || "-";
             const progressPercent = calculateProgressPercentage(item);
-
-            // Determine status button class based on status type
-            const statusClass = status.toLowerCase();
 
             return `
                 <tr>
@@ -251,15 +321,14 @@ function generateTableRows(data) {
                     <td>${customFormats}</td>
                     <td class="timeleft">${timeleft}</td>
                     <td>
-                        <span class="status-button ${statusClass}" title="${status}">
+                        <span class="status-button ${status.toLowerCase()}" title="${status}">
                             ${status}
                         </span>
                     </td>
                     <td>
                         <div class="progress">
-                            <div class="progress-bar ${statusClass} ${statusClass === 'downloading' ? 'animated' : ''}" 
-                                 style="width: ${progressPercent}%" 
-                                 title="${progressPercent.toFixed(2)}%">
+                            <div class="progress-bar ${status.toLowerCase()}" 
+                                 style="width: ${progressPercent}%">
                                 <span class="text">${progressPercent.toFixed(2)}%</span>
                             </div>
                         </div>
@@ -271,19 +340,14 @@ function generateTableRows(data) {
 
 // Function to start refreshing data every 10 seconds
 function startDataRefresh() {
-    if (refreshInterval) clearInterval(refreshInterval); // Clear any existing interval
-    if (loaderTimeout) clearTimeout(loaderTimeout); // Clear any existing timeout
+    if (refreshInterval) clearInterval(refreshInterval);
+    if (loaderTimeout) clearTimeout(loaderTimeout);
 
-    // Start a new interval to refresh data every 10 seconds
     refreshInterval = setInterval(() => {
         fetchAndPopulateTable();
-
-        // Clear and restart the loader timeout
         if (loaderTimeout) clearTimeout(loaderTimeout);
-        loaderTimeout = setTimeout(() => {
-            stopLoaderAnimation();
-        }, 12000); // Stop loader animation after 12 seconds if no refresh occurs
-    }, 10000); // 10 seconds
+        loaderTimeout = setTimeout(() => stopLoaderAnimation(), 12000);
+    }, 10000);
 }
 
 // Function to check for overflow and hide percentage text if needed
@@ -303,36 +367,16 @@ function checkOverflow() {
     });
 }
 
-// Function to monitor URL parameters and call switchTable once
-function monitorUrlParameters() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tableParam = urlParams.get('table');
-    if (tableParam === 'movies') {
-        switchTable('movies');
-    } else if (tableParam === 'tvshows') {
-        switchTable('tvshows');
-    }
-}
-
-// Restore scroll positions on page load
+// Restore settings on page load
 document.addEventListener('DOMContentLoaded', () => {
-    // Restore the previous tab from localStorage
+    monitorTabFromUrl(); // Handle URL parameter on page load
+
     const savedTable = localStorage.getItem('currentTable');
-    if (savedTable) {
-        currentTable = savedTable;
+    if (!new URLSearchParams(window.location.search).get('table') && savedTable) {
+        switchTable(savedTable); // Restore table from localStorage if no URL param
     }
 
-    // Set the active tab
-    document.getElementById('moviesButton').classList.toggle('active', currentTable === 'movies');
-    document.getElementById('tvShowsButton').classList.toggle('active', currentTable === 'tvshows');
-
-    // Update table headers and populate the table
     updateTableHeaders();
     fetchAndPopulateTable();
-
-    // Start refreshing data every 10 seconds
     startDataRefresh();
-
-    // Monitor URL parameters for table switching
-    monitorUrlParameters();
 });

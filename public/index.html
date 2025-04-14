@@ -27,8 +27,12 @@
     <h1>Download Queue</h1>
 
     <div class="button-container">
-        <button id="moviesButton" class="themed-button active" onclick="switchTable('movies')">Movies</button>
-        <button id="tvShowsButton" class="themed-button" onclick="switchTable('tvshows')">TV Shows</button>
+        <button id="moviesButton" class="themed-button active" onclick="switchTable('movies')">
+            Movies <span id="moviesCount" class="count-bubble">0</span>
+        </button>
+        <button id="tvShowsButton" class="themed-button" onclick="switchTable('tvshows')">
+            TV Shows <span id="tvShowsCount" class="count-bubble">0</span>
+        </button>
     </div>
 
     <div id="tableContainer" class="table-container">

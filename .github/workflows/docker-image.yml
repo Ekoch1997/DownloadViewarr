@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '.github/workflows/docker-image.yml'
+      - 'README.md'
 
 jobs:
   build:

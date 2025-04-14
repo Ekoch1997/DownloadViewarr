@@ -105,7 +105,29 @@ tr:hover {
     border: 1px solid #e5a00d;
 }
 
-/* Button Styles for Quality and Formats (Unchanged) */
+/* Count Bubble Styles */
+.count-bubble {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #b0e57c; /* Green download count bubble */
+    color: #1a1a1a; /* Dark text for contrast */
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    display: none; /* Hidden by default */
+}
+
+/* Ensure parent tabs have relative positioning */
+#moviesButton, #tvShowsButton {
+    position: relative; /* Required for absolute positioning of the bubbles */
+}
+
+/* Button Styles for Quality and Formats */
 .button {
     display: inline-block;
     padding: 4px 8px;
@@ -140,17 +162,14 @@ tr:hover {
 
 .status-button.completed {
     background-color: #3c67a3; /* Blue for completed */
-    color: #1a1a1a;
 }
 
 .status-button.warning {
     background-color: #f27474; /* Red for warnings */
-    color: #1a1a1a;
 }
 
 .status-button.paused {
     background-color: #d3d3d3; /* Grey for paused */
-    color: #1a1a1a;
 }
 
 /* Progress Bar */

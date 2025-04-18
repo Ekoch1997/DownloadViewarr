@@ -72,116 +72,69 @@ function updateTableHeaders() {
     }
 }
 
-// Function to fetch data for both tables and update bubbles
-async function fetchBubbleCounts() {
-    try {
-        // Fetch data for Movies
-        const moviesResponse = await fetch('/api/queue/movies');
-        if (!moviesResponse.ok) throw new Error(`Failed to fetch movies data: ${moviesResponse.statusText}`);
-        const moviesData = await moviesResponse.json();
-        const moviesDownloadingCount = moviesData.filter(item => item.status.toLowerCase() === 'downloading').length;
-
-        // Update the Movies bubble
-        const moviesCountBubble = document.getElementById('moviesCount');
-        if (moviesDownloadingCount > 0) {
-            moviesCountBubble.textContent = moviesDownloadingCount;
-            moviesCountBubble.style.display = 'block';
-        } else {
-            moviesCountBubble.style.display = 'none';
-        }
-
-        // Fetch data for TV Shows
-        const tvShowsResponse = await fetch('/api/queue/tvshows');
-        if (!tvShowsResponse.ok) throw new Error(`Failed to fetch TV shows data: ${tvShowsResponse.statusText}`);
-        const tvShowsData = await tvShowsResponse.json();
-        const tvShowsDownloadingCount = tvShowsData.filter(item => item.status.toLowerCase() === 'downloading').length;
-
-        // Update the TV Shows bubble
-        const tvShowsCountBubble = document.getElementById('tvShowsCount');
-        if (tvShowsDownloadingCount > 0) {
-            tvShowsCountBubble.textContent = tvShowsDownloadingCount;
-            tvShowsCountBubble.style.display = 'block';
-        } else {
-            tvShowsCountBubble.style.display = 'none';
-        }
-    } catch (error) {
-        console.error('Error fetching bubble counts:', error.message);
-    }
-}
-
 // Function to fetch and populate the table with data
 async function fetchAndPopulateTable() {
     try {
+        // Fetch data for the active table
         const endpoint = currentTable === 'movies' ? '/api/queue/movies' : '/api/queue/tvshows';
         const response = await fetch(endpoint);
         if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
         const data = await response.json();
 
-        // Count rows with a "downloading" status
+        // Update the active table and its bubble
         const downloadingCount = data.filter(item => item.status.toLowerCase() === 'downloading').length;
+        updateBubble(currentTable === 'movies' ? 'moviesCount' : 'tvShowsCount', downloadingCount);
 
-        // Update the count bubble for the appropriate tab
-        if (currentTable === 'movies') {
-            const moviesCountBubble = document.getElementById('moviesCount');
-            if (downloadingCount > 0) {
-                moviesCountBubble.textContent = downloadingCount;
-                moviesCountBubble.style.display = 'block';
-            } else {
-                moviesCountBubble.style.display = 'none';
-            }
-        } else if (currentTable === 'tvshows') {
-            const tvShowsCountBubble = document.getElementById('tvShowsCount');
-            if (downloadingCount > 0) {
-                tvShowsCountBubble.textContent = downloadingCount;
-                tvShowsCountBubble.style.display = 'block';
-            } else {
-                tvShowsCountBubble.style.display = 'none';
-            }
-        }
-
-        // Get the current sorting state
-        const columnIndex = parseInt(localStorage.getItem('sortColumnIndex'), 10); // Default to no sorting
+        // Populate the active table
+        const columnIndex = parseInt(localStorage.getItem('sortColumnIndex'), 10);
         const isAscending = localStorage.getItem('sortOrder') === 'asc';
-
-        // Sort the data before rendering if sorting is defined
         if (!isNaN(columnIndex)) {
             data.sort((itemA, itemB) => {
                 const valueA = getColumnValue(itemA, columnIndex);
                 const valueB = getColumnValue(itemB, columnIndex);
-
                 const compareResult = isNaN(valueA) || isNaN(valueB)
                     ? valueA.localeCompare(valueB, undefined, { numeric: true })
                     : parseFloat(valueA) - parseFloat(valueB);
-
                 return isAscending ? compareResult : -compareResult;
             });
         }
-
-        // Generate table rows
-        const tableBody = document.getElementById('table-body');
-        tableBody.innerHTML = generateTableRows(data);
-
-        // Update header icons based on sorting state
+        document.getElementById('table-body').innerHTML = generateTableRows(data);
         updateHeaderIcons(columnIndex, isAscending);
 
-        // After populating the table, check for progress bar overflows
+        // Call checkOverflow to handle progress bar overflows
         checkOverflow();
 
-        // Reset the loader animation on successful data fetch
+        // Refresh loader animation
         resetLoaderAnimation();
-
-        // Clear and restart the loader timeout
         if (loaderTimeout) clearTimeout(loaderTimeout);
-        loaderTimeout = setTimeout(() => {
-            stopLoaderAnimation();
-        }, 12000); // Stop loader animation after 12 seconds if no refresh occurs
+        loaderTimeout = setTimeout(() => stopLoaderAnimation(), 12000);
+
+        // Fetch data for the inactive table to update its bubble
+        const inactiveEndpoint = currentTable === 'movies' ? '/api/queue/tvshows' : '/api/queue/movies';
+        const inactiveResponse = await fetch(inactiveEndpoint);
+        if (!inactiveResponse.ok) throw new Error(`Failed to fetch data: ${inactiveResponse.statusText}`);
+        const inactiveData = await inactiveResponse.json();
+        const inactiveDownloadingCount = inactiveData.filter(item => item.status.toLowerCase() === 'downloading').length;
+        updateBubble(currentTable === 'movies' ? 'tvShowsCount' : 'moviesCount', inactiveDownloadingCount);
+
     } catch (error) {
         console.error('Error fetching and populating table:', error.message);
         stopLoaderAnimation();
     }
+}
 
-    // Update the count bubbles for both tabs
-    await fetchBubbleCounts();
+// Function to refresh download status and add animations
+function refreshDownloadStatus() {
+    const rows = document.querySelectorAll('.download-row');
+    rows.forEach(row => {
+        const status = row.getAttribute('data-status');
+        const progressBar = row.querySelector('.progress-bar');
+        if (status && status.toLowerCase() === 'downloading' && progressBar) {
+            progressBar.classList.add('animated');
+        } else if (progressBar) {
+            progressBar.classList.remove('animated');
+        }
+    });
 }
 
 // Helper function to extract column values for sorting
@@ -233,6 +186,16 @@ function calculateProgressPercentage(item) {
     return size ? ((size - sizeLeft) / size) * 100 : 0; // Return progress as a percentage
 }
 
+function updateBubble(elementId, count) {
+    const bubble = document.getElementById(elementId);
+    if (count > 0) {
+        bubble.textContent = count;
+        bubble.style.display = 'block';
+    } else {
+        bubble.style.display = 'none';
+    }
+}
+
 // Function to sort the table when a header is clicked
 function sortTable(columnIndex) {
     const isAscending = localStorage.getItem('sortOrder') !== 'asc';
@@ -278,7 +241,7 @@ function generateTableRows(data) {
             const progressPercent = calculateProgressPercentage(item);
 
             return `
-                <tr>
+                <tr class="download-row" data-status="${status.toLowerCase()}">
                     <td>${movie.title}</td>
                     <td class="year">${movie.year}</td>
                     <td><span class="button quality">${quality}</span></td>
@@ -290,7 +253,7 @@ function generateTableRows(data) {
                         </span>
                     </td>
                     <td>
-                        <div class="progress">
+                        <div class="progress" title="Progress: ${progressPercent.toFixed(2)}%">
                             <div class="progress-bar ${status.toLowerCase()}" 
                                  style="width: ${progressPercent}%">
                                 <span class="text">${progressPercent.toFixed(2)}%</span>
@@ -315,7 +278,7 @@ function generateTableRows(data) {
             const progressPercent = calculateProgressPercentage(item);
 
             return `
-                <tr>
+                <tr class="download-row" data-status="${status.toLowerCase()}">
                     <td>${title}</td>
                     <td><span class="button quality">${quality}</span></td>
                     <td>${customFormats}</td>
@@ -326,7 +289,7 @@ function generateTableRows(data) {
                         </span>
                     </td>
                     <td>
-                        <div class="progress">
+                        <div class="progress" title="Progress: ${progressPercent.toFixed(2)}%">
                             <div class="progress-bar ${status.toLowerCase()}" 
                                  style="width: ${progressPercent}%">
                                 <span class="text">${progressPercent.toFixed(2)}%</span>

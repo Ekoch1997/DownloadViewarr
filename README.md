@@ -122,6 +122,7 @@ Developed by [pir8radio](https://github.com/pir8radio).
 - added tab "bubbles" to show how many active downloads are on each tab "Movies" & "TV Shows"
 - Cleaned up header sort "arrows" hide them on all but sorted column.
 - Can now sort by download progress too.
+- Created single line of javascript you can add to any existing page, to pop up a window showing the Download Viewarr. 
 
 ## 04-14-2025
 - Create Docker Image for project

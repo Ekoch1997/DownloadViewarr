@@ -110,3 +110,25 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 ## Author
 
 Developed by [pir8radio](https://github.com/pir8radio).
+
+
+
+
+
+
+# Update History
+## 04-18-2025
+- Fixed loading bar animiation (that i accidently broke)
+- added tab "bubbles" to show how many active downloads are on each tab "Movies" & "TV Shows"
+- Cleaned up header sort "arrows" hide them on all but sorted column.
+- Can now sort by download progress too.
+
+## 04-14-2025
+- Create Docker Image for project
+- Automate Docker Build
+- Added support for direct links to "Movies" and "TV Shows" tabs.
+- Improved "LIVE" animation, goes offline and online automatically and picks up where it left off.
+- Added some "memory", after a page refresh/reload the Download Viewarr will go back to the last tab you were on, unless you linked to the tab or its your first visit.
+
+## 04-12-2025
+- Public Release

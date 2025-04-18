@@ -184,6 +184,20 @@ async function fetchAndPopulateTable() {
     await fetchBubbleCounts();
 }
 
+// Function to refresh download status and add animations
+function refreshDownloadStatus() {
+    const rows = document.querySelectorAll('.download-row');
+    rows.forEach(row => {
+        const status = row.getAttribute('data-status');
+        const progressBar = row.querySelector('.progress-bar');
+        if (status && status.toLowerCase() === 'downloading' && progressBar) {
+            progressBar.classList.add('animated');
+        } else if (progressBar) {
+            progressBar.classList.remove('animated');
+        }
+    });
+}
+
 // Helper function to extract column values for sorting
 function getColumnValue(item, columnIndex) {
     if (currentTable === 'movies') {
@@ -278,7 +292,7 @@ function generateTableRows(data) {
             const progressPercent = calculateProgressPercentage(item);
 
             return `
-                <tr>
+                <tr class="download-row" data-status="${status.toLowerCase()}">
                     <td>${movie.title}</td>
                     <td class="year">${movie.year}</td>
                     <td><span class="button quality">${quality}</span></td>
@@ -290,7 +304,7 @@ function generateTableRows(data) {
                         </span>
                     </td>
                     <td>
-                        <div class="progress">
+                        <div class="progress" title="Progress: ${progressPercent.toFixed(2)}%">
                             <div class="progress-bar ${status.toLowerCase()}" 
                                  style="width: ${progressPercent}%">
                                 <span class="text">${progressPercent.toFixed(2)}%</span>
@@ -315,7 +329,7 @@ function generateTableRows(data) {
             const progressPercent = calculateProgressPercentage(item);
 
             return `
-                <tr>
+                <tr class="download-row" data-status="${status.toLowerCase()}">
                     <td>${title}</td>
                     <td><span class="button quality">${quality}</span></td>
                     <td>${customFormats}</td>
@@ -326,7 +340,7 @@ function generateTableRows(data) {
                         </span>
                     </td>
                     <td>
-                        <div class="progress">
+                        <div class="progress" title="Progress: ${progressPercent.toFixed(2)}%">
                             <div class="progress-bar ${status.toLowerCase()}" 
                                  style="width: ${progressPercent}%">
                                 <span class="text">${progressPercent.toFixed(2)}%</span>

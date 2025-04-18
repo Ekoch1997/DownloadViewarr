@@ -215,7 +215,7 @@ tr:hover {
 }
 
 /* Progress Bar Animation for Downloading */
-.progress-bar.downloading.animated::after {
+.progress-bar.downloading::after {
     content: "";
     position: absolute;
     top: 0;

@@ -18,7 +18,7 @@ https://hub.docker.com/r/pir8radio/downloadviewarr
 - Embed an easy floating button into Ombi, add the below line just above ```</body>``` in the ```ClientApp/dist/index.html``` file.
   * the color="#e5a00d" part is optional, you can make the floating button match your theme, leave the color part off and it will default to plex theme colors. Can also be embedded into other webpages.
   ```html
-  <script src="http://<downloadviewarr ulr or IP>/downloadviewarr_button.js" downloadviewarr-url="http://<downloadviewarr ulr or IP>" color="#e5a00d"></script>
+  <script src="http://<downloadviewarr url or IP>/downloadviewarr_button.js" downloadviewarr-url="http://<downloadviewarr url or IP>" color="#e5a00d"></script>
   ```
   
 ## Screenshots

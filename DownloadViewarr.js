@@ -19,6 +19,13 @@ const settings = {
 /*==================================== SETTINGS =====================================*/
 
 
+// Middleware to enable CORS
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*'); // Allow all origins
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
+
 // Serve static files from the "public" directory
 app.use(express.static('public'));
 
@@ -59,6 +66,26 @@ app.get('/api/queue/tvshows', async (req, res) => {
     } catch (error) {
         console.error('Error in /api/queue/tvshows:', error.message);
         res.status(500).send('Failed to fetch TV Shows data');
+    }
+});
+
+// Server-side endpoint to provide the aggregate downloading queue count
+app.get('/api/queue/downloading', async (req, res) => {
+    try {
+        // Fetch downloading data for movies and TV shows
+        const [movies, tvshows] = await Promise.all([fetchData('movies'), fetchData('tvshows')]);
+
+        // Filter items with "downloading" status and count them
+        const totalMoviesDownloading = movies.filter(item => item.status.toLowerCase() === 'downloading').length;
+        const totalTvShowsDownloading = tvshows.filter(item => item.status.toLowerCase() === 'downloading').length;
+
+        // Total count
+        const totalDownloading = totalMoviesDownloading + totalTvShowsDownloading;
+
+        res.json({ total: totalDownloading }); // Return total downloading count
+    } catch (error) {
+        console.error('Error in /api/queue/downloading:', error.message);
+        res.status(500).send('Failed to fetch downloading queue data');
     }
 });
 

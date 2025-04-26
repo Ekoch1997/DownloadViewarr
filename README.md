@@ -15,7 +15,12 @@ https://hub.docker.com/r/pir8radio/downloadviewarr
 - Displays data in an organized format on a web page.
 - Easy to configure and run locally.
 - Can be used by itself, or embeded as an iframe within ombi or some other request app.
-
+- Embed an easy floating button into Ombi, add the below line just above ```</body>``` in the ```ClientApp/dist/index.html``` file.
+  * the color="#e5a00d" part is optional, you can make the floating button match your theme, leave the color part off and it will default to plex theme colors. Can also be embedded into other webpages.
+  ```html
+  <script src="http://<downloadviewarr url or IP>/downloadviewarr_button.js" downloadviewarr-url="http://<downloadviewarr url or IP>" color="#e5a00d"></script>
+  ```
+  
 ## Screenshots
 - Standalone Webpage
 ![image](https://github.com/user-attachments/assets/3484f6f5-9673-483d-83c0-1c15293b161b)
@@ -105,3 +110,26 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 ## Author
 
 Developed by [pir8radio](https://github.com/pir8radio).
+
+
+
+
+
+
+# Update History
+## 04-18-2025
+- Fixed loading bar animiation (that i accidently broke)
+- added tab "bubbles" to show how many active downloads are on each tab "Movies" & "TV Shows"
+- Cleaned up header sort "arrows" hide them on all but sorted column.
+- Can now sort by download progress too.
+- Created single line of javascript you can add to any existing page, to pop up a window showing the Download Viewarr. 
+
+## 04-14-2025
+- Create Docker Image for project
+- Automate Docker Build
+- Added support for direct links to "Movies" and "TV Shows" tabs.
+- Improved "LIVE" animation, goes offline and online automatically and picks up where it left off.
+- Added some "memory", after a page refresh/reload the Download Viewarr will go back to the last tab you were on, unless you linked to the tab or its your first visit.
+
+## 04-12-2025
+- Public Release

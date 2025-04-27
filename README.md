@@ -44,7 +44,7 @@ docker pull pir8radio/downloadviewarr
 ![image](https://github.com/user-attachments/assets/fd89ce5b-8564-4aaa-b446-f84ec6bb9812)
 
 
-- Mobile Device - Embeded in Ombi
+- Mobile Device - Embeded in Ombi<br>
 [![mobile](https://github.com/user-attachments/assets/81261ff3-58c1-45d7-9686-ad0324aa8b4f)](https://github.com/user-attachments/assets/81261ff3-58c1-45d7-9686-ad0324aa8b4f)
 
 

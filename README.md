@@ -98,7 +98,7 @@ const settings = {
 
 ## API Endpoints
 
-The application includes the following API endpoints that return json data:
+The application includes the following API endpoints:
 
 - **Movies Queue**: `/api/queue/movies`
 - **TV Shows Queue**: `/api/queue/tvshows`

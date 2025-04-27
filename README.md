@@ -102,6 +102,7 @@ The application includes the following API endpoints:
 
 - **Movies Queue**: `/api/queue/movies`
 - **TV Shows Queue**: `/api/queue/tvshows`
+- **Total Active Downloads**: `/api/queue/downloading`
 
 These endpoints fetch data from the Radarr and Sonarr APIs and return it in JSON format.
 

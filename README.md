@@ -1,5 +1,6 @@
 
 ![image](https://github.com/user-attachments/assets/a25dba92-84d6-431d-abad-eb0777141d2d)
+![Docker Pulls](https://img.shields.io/docker/pulls/pir8radio/downloadviewarr)
 
 
 # DownloadViewarr

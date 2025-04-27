@@ -3,9 +3,9 @@
 [![Github Visits](https://img.shields.io/endpoint?url=https://github-counter.vercel.app/api/visits&query=$.message?)](#) [![Docker Pulls](https://img.shields.io/docker/pulls/pir8radio/downloadviewarr?)](https://hub.docker.com/r/pir8radio/downloadviewarr) [![Github Clones](https://img.shields.io/endpoint?url=https://github-counter.vercel.app/api/clones&query=$.message?)](#)
 
 
-# DownloadViewarr
+# Download Viewarr
 
-DownloadViewarr is a Node.js application designed to fetch and display download queues for [Radarr](https://radarr.video/) and [Sonarr](https://sonarr.tv/). It provides a simple and user-friendly interface to view movies and TV show download queues via a web page.
+Download Viewarr is a Node.js application designed to fetch and display download queues for [Radarr](https://radarr.video/) and [Sonarr](https://sonarr.tv/). It provides a simple and user-friendly interface to view movies and TV show download queues via a web page.
 
 ## Docker Image
 [![image](https://github.com/user-attachments/assets/2f17bae4-5dc6-4b7d-83b3-da6b7422a536)](https://hub.docker.com/r/pir8radio/downloadviewarr)

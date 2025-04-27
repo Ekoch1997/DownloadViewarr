@@ -21,16 +21,24 @@ https://hub.docker.com/r/pir8radio/downloadviewarr
   <script src="http://<downloadviewarr url or IP>/downloadviewarr_button.js" downloadviewarr-url="http://<downloadviewarr url or IP>" color="#e5a00d"></script>
   ```
   
-## Screenshots
+## Screenshots 
+** Simulated images, of course...
+
+- Browser Tab (new download indicator)<br>
+![browsertab](https://github.com/user-attachments/assets/11570056-afaf-46dc-8edd-f1f28a1da556)
+
+  
 - Standalone Webpage
-![image](https://github.com/user-attachments/assets/3484f6f5-9673-483d-83c0-1c15293b161b)
+![Timeline+1+(555551)](https://github.com/user-attachments/assets/67ea9882-7e24-44ce-8576-8799a5b2b2d5)
+
 
 - Embeded as a modal popup in Ombi (little cloud icon in the bottom left to bring it up)
-  This method requires some HTML/Javascript code to be added to the Ombi web UI on your end
-![image](https://github.com/user-attachments/assets/2a66fa2e-2c1a-45e0-968c-f8caf4be99c4)
+  This method requires some HTML/Javascript code to be added to whatever page you want, like Ombi (in this example)
+![image](https://github.com/user-attachments/assets/fd89ce5b-8564-4aaa-b446-f84ec6bb9812)
+
 
 - Mobile Device - Embeded in Ombi
-![mobile](https://github.com/user-attachments/assets/89209dba-2153-4540-9409-813e6226a81b)
+[![mobile](https://github.com/user-attachments/assets/89209dba-2153-4540-9409-813e6226a81b)](https://github.com/user-attachments/assets/89209dba-2153-4540-9409-813e6226a81b)
 
 ## Installation
 

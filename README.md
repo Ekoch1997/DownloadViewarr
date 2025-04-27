@@ -23,9 +23,9 @@ docker pull pir8radio/downloadviewarr
 - Can be used by itself, or embeded as an iframe within ombi or some other request app.
 - Embed an easy floating button into Ombi, add the below line just above ```</body>``` in the ```ClientApp/dist/index.html``` file.
   * the color="#e5a00d" part is optional, you can make the floating button match your theme, leave the color part off and it will default to plex theme colors. Can also be embedded into other webpages.
-  * Enter the IP address (or URL) and port number to access your Download Viewarr installation from the internet. It must be entered twice: once to retrieve the JS file and again to indicate where the script should obtain the API data. This setup allows the script to be pulled from a server different from the one where Download Viewarr is installed.
+  * Enter the IP address (or URL) and port number to access your Download Viewarr installation from the internet in the ```downloadviewarr-url``` area in this embed. Alternativly you can replace the ```script src``` url with your Download Viewarr IP (or URL) and host the script from your local copy of Download Viewarr, I just figured this github hosted copy would be easier for you guys and you always have the latest copy!
   ```html
-  <script src="http://<downloadviewarr url or IP>/downloadviewarr_button.js" downloadviewarr-url="http://<downloadviewarr url or IP>" color="#e5a00d"></script>
+  <script src="https://pir8radio.github.io/DownloadViewarr/public/downloadviewarr_button.js" downloadviewarr-url="http://<downloadviewarr url or IP>" color="#e5a00d"></script>
   ```
   
 ## Screenshots 

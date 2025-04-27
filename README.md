@@ -1,13 +1,19 @@
 
-![image](https://github.com/user-attachments/assets/a25dba92-84d6-431d-abad-eb0777141d2d)
+[![image](https://github.com/user-attachments/assets/a25dba92-84d6-431d-abad-eb0777141d2d)](https://github.com/pir8radio/DownloadViewarr)
+[![Github Visits](https://img.shields.io/endpoint?url=https://github-counter.vercel.app/api/visits&query=$.message?)](#) [![Docker Pulls](https://img.shields.io/docker/pulls/pir8radio/downloadviewarr?)](https://hub.docker.com/r/pir8radio/downloadviewarr) [![Github Clones](https://img.shields.io/endpoint?url=https://github-counter.vercel.app/api/clones&query=$.message?)](#)
 
 
-# DownloadViewarr
+# Download Viewarr
 
-DownloadViewarr is a Node.js application designed to fetch and display download queues for [Radarr](https://radarr.video/) and [Sonarr](https://sonarr.tv/). It provides a simple and user-friendly interface to view movies and TV show download queues via a web page.
+Download Viewarr is a Node.js application designed to fetch and display download queues for [Radarr](https://radarr.video/) and [Sonarr](https://sonarr.tv/). It provides a simple and user-friendly interface to view movies and TV show download queues via a web page.
 
 ## Docker Image
-https://hub.docker.com/r/pir8radio/downloadviewarr
+[![image](https://github.com/user-attachments/assets/2f17bae4-5dc6-4b7d-83b3-da6b7422a536)](https://hub.docker.com/r/pir8radio/downloadviewarr)
+
+```html
+docker pull pir8radio/downloadviewarr
+```
+
 
 ## Features
 
@@ -17,8 +23,9 @@ https://hub.docker.com/r/pir8radio/downloadviewarr
 - Can be used by itself, or embeded as an iframe within ombi or some other request app.
 - Embed an easy floating button into Ombi, add the below line just above ```</body>``` in the ```ClientApp/dist/index.html``` file.
   * the color="#e5a00d" part is optional, you can make the floating button match your theme, leave the color part off and it will default to plex theme colors. Can also be embedded into other webpages.
+  * Enter the IP address (or URL) and port number to access your Download Viewarr installation from the internet in the ```downloadviewarr-url``` area in this embed. Alternativly you can replace the ```script src``` url with your Download Viewarr IP (or URL) and host the script from your local copy of Download Viewarr, I just figured this github hosted copy would be easier for you guys and you always have the latest copy!
   ```html
-  <script src="http://<downloadviewarr url or IP>/downloadviewarr_button.js" downloadviewarr-url="http://<downloadviewarr url or IP>" color="#e5a00d"></script>
+  <script src="https://pir8radio.github.io/DownloadViewarr/public/downloadviewarr_button.js" downloadviewarr-url="http://<downloadviewarr url or IP>" color="#e5a00d"></script>
   ```
   
 ## Screenshots 

@@ -1,6 +1,6 @@
 
 ![image](https://github.com/user-attachments/assets/a25dba92-84d6-431d-abad-eb0777141d2d)
-![Github Visits](https://img.shields.io/endpoint?url=https://github-counter.vercel.app/api/visits&query=$.message?) ![Docker Pulls](https://img.shields.io/docker/pulls/pir8radio/downloadviewarr) ![Github Clones](https://img.shields.io/endpoint?url=https://github-counter.vercel.app/api/clones&query=$.message?)
+![Github Visits](https://img.shields.io/endpoint?url=https://github-counter.vercel.app/api/visits&query=$.message?) ![Docker Pulls](https://img.shields.io/docker/pulls/pir8radio/downloadviewarr?) ![Github Clones](https://img.shields.io/endpoint?url=https://github-counter.vercel.app/api/clones&query=$.message?)
 
 
 # DownloadViewarr

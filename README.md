@@ -125,6 +125,12 @@ Developed by [pir8radio](https://github.com/pir8radio).
 
 
 # Update History
+## 04-26-2025
+- This should be the last flash update, lol sorry guys, been pushing out features!
+- added tab download indicator to the floating button embed
+- added download indicator to the actual floating button (updates every 30 seconds) so you can see if something started downloading without opening the modal.
+- cleaned up some code.
+
 ## 04-18-2025
 - Fixed loading bar animiation (that i accidently broke)
 - added tab "bubbles" to show how many active downloads are on each tab "Movies" & "TV Shows"

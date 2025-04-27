@@ -98,10 +98,11 @@ const settings = {
 
 ## API Endpoints
 
-The application includes the following API endpoints:
+The application includes the following API endpoints that return json data:
 
 - **Movies Queue**: `/api/queue/movies`
 - **TV Shows Queue**: `/api/queue/tvshows`
+- **Total Active Downloads**: `/api/queue/downloading`
 
 These endpoints fetch data from the Radarr and Sonarr APIs and return it in JSON format.
 

@@ -99,6 +99,10 @@ const settings = {
    http://localhost:8888/?table=tvshows
    ```
 
+## Support
+https://www.reddit.com/r/DownloadViewarr/
+
+
 ## Dependencies
 
 - [Express](https://expressjs.com/): Web framework for Node.js.

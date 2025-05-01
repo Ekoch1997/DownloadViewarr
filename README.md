@@ -1,6 +1,6 @@
 
 [![image](https://github.com/user-attachments/assets/a25dba92-84d6-431d-abad-eb0777141d2d)](https://github.com/pir8radio/DownloadViewarr)
-[![Github Visits](https://img.shields.io/endpoint?logo=GitHub&url=https://github-counter.vercel.app/api/visits&query=$.message?)](#) [![Docker Pulls](https://img.shields.io/docker/pulls/pir8radio/downloadviewarr?logo=Docker&logoColor=f5f5f5)](https://hub.docker.com/r/pir8radio/downloadviewarr) [![Github Clones](https://img.shields.io/endpoint?logo=GitHub&url=https://github-counter.vercel.app/api/clones&query=$.message?)](#) [![Reddit Subscribers](https://img.shields.io/reddit/subreddit-subscribers/:DownloadViewarr)](https://www.reddit.com/r/DownloadViewarr)
+[![Github Visits](https://img.shields.io/endpoint?logo=GitHub&url=https://github-counter.vercel.app/api/visits&query=$.message?)](#) [![Docker Pulls](https://img.shields.io/docker/pulls/pir8radio/downloadviewarr?logo=Docker&logoColor=f5f5f5)](https://hub.docker.com/r/pir8radio/downloadviewarr) [![Github Clones](https://img.shields.io/endpoint?logo=GitHub&url=https://github-counter.vercel.app/api/clones&query=$.message?)](#) [![Reddit Subscribers](https://img.shields.io/reddit/subreddit-subscribers/DownloadViewarr)](https://www.reddit.com/r/DownloadViewarr)
 
 
 # Download Viewarr
@@ -100,7 +100,7 @@ const settings = {
    ```
 
 ## Support
-[![Reddit Subscribers](https://img.shields.io/reddit/subreddit-subscribers/:DownloadViewarr)](https://www.reddit.com/r/DownloadViewarr)
+[![Reddit Subscribers](https://img.shields.io/reddit/subreddit-subscribers/DownloadViewarr)](https://www.reddit.com/r/DownloadViewarr)
 
 
 ## Dependencies

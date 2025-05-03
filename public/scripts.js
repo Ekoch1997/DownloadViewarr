@@ -104,6 +104,9 @@ async function fetchAndPopulateTable() {
         // Call checkOverflow to handle progress bar overflows
         checkOverflow();
 
+	// Call fetchDriveSpace to update the drive space info
+	fetchDriveSpace();
+
         // Refresh loader animation
         resetLoaderAnimation();
         if (loaderTimeout) clearTimeout(loaderTimeout);
@@ -328,6 +331,73 @@ function checkOverflow() {
             text.style.visibility = 'visible';
         }
     });
+}
+
+// Function to check media drive(s) status
+let driveStatusDisabled = false;
+let runCounter = 0;
+
+async function fetchDriveSpace() {
+    // If "Drive status is disabled." was returned previously, skip execution
+    if (driveStatusDisabled) {
+        // console.log("Skipping fetchDriveSpace: Drive status disabled."); // Debug
+        return;
+    }
+
+    // Execute only on first run and when runCounter reaches 0
+    if (runCounter > 0) {
+        // console.log(`Skipping this fetch cycle, will recheck drive space in ${runCounter} more cycles`); // Debug
+        runCounter--;
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/drive-space');
+        
+        // First run check
+        if (response.status === 403) { // Status 403 indicates drive status is disabled
+            driveStatusDisabled = true; // Mark that future runs should be skipped
+            console.log("Drive status is disabled. Will not fetch drive space in future runs.");
+            return;
+        }
+
+        const drives = await response.json();
+
+        const driveSpaceContainer = document.getElementById('driveSpaceContainer');
+        if (driveSpaceContainer) {
+            driveSpaceContainer.innerHTML = ''; // Clear any existing content
+
+            drives.forEach(drive => {
+                // Convert values from GB to TB
+                const sizeTB = (parseFloat(drive.size) / 1024).toFixed(2);
+                const usedTB = (parseFloat(drive.used) / 1024).toFixed(2);
+                const availableTB = (parseFloat(drive.available) / 1024).toFixed(2);
+
+                // Create bar graph section for each drive
+                const driveElement = document.createElement('div');
+                driveElement.className = 'drive-space';
+
+                driveElement.innerHTML = `
+                    <div class="drive-space-label">${drive.path}</div>
+                    <div class="drive-space-progress">
+                        <div class="drive-space-progress-bar" 
+                             style="width: ${drive.percentage}%" 
+                             title="${usedTB} TB of ${sizeTB} TB used (${availableTB} TB available)">
+                            <span class="drive-space-text">${drive.percentage}%</span>
+                        </div>
+                    </div>
+                `;
+
+                driveSpaceContainer.appendChild(driveElement);
+            });
+        }
+
+        // Reset runCounter after fetch execution
+        runCounter = 10;
+
+    } catch (error) {
+        console.error('Failed to fetch drive space data:', error);
+    }
 }
 
 // Restore settings on page load

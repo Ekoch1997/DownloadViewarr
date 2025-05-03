@@ -1,23 +1,48 @@
 const express = require('express');
 const axios = require('axios');
+const checkDiskSpace = require('check-disk-space').default;
+const path = require('path');
 const app = express();
 
-/*==================================== SETTINGS =====================================*/
-const settings = {
-    movies: {
-        apiServerIP: process.env.RADARR_SERVER_IP || '127.0.0.1',                    // Radarr server IP (Docker: from env var, Native: default to localhost)
-        apiServerPort: process.env.RADARR_SERVER_PORT || 7878,                       // Radarr server port
-        apiKey: process.env.RADARR_API_KEY || '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx',    // Radarr API Key
-    },
-    tvshows: {
-        apiServerIP: process.env.SONARR_SERVER_IP || '127.0.0.1',                    // Sonarr server IP (Docker: from env var, Native: default to localhost)
-        apiServerPort: process.env.SONARR_SERVER_PORT || 8989,                       // Sonarr server port
-        apiKey: process.env.SONARR_API_KEY || '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx',    // Sonarr API Key
-    },
-    nodeServerPort: process.env.NODE_SERVER_PORT || 8888,                            // Port to view download page
-};
+
+
 /*==================================== SETTINGS =====================================*/
 
+// RADARR SERVER SETTINGS
+const DEFAULT_RADARR_SERVER_IP = '127.0.0.1'					// Radarr server IP/URL
+const DEFAULT_RADARR_SERVER_PORT = 7878						// Radarr server port
+const DEFAULT_RADARR_API_KEY = '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx'		// Radarr API Key
+
+// SONARR SERVER SETTINGS
+const DEFAULT_SONARR_SERVER_IP = '127.0.0.1'					// Sonarr server IP/URL
+const DEFAULT_SONARR_SERVER_PORT = 8989						// Sonarr server port
+const DEFAULT_SONARR_API_KEY = '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx'		// Sonarr API Key
+
+// DOWNLOAD VIEWARR SETTINGS
+const DEFAULT_SERVER_PORT = 8888						// Port to view download status page
+const DEFAULT_ENABLE_DRIVE_STATUS = "FALSE"					// True or False - Enable media drive(s) bar graphs.
+
+/*==================================== SETTINGS =====================================*/
+
+
+
+
+// Don't edit below this line
+
+const settings = {
+    movies: {
+        apiServerIP: process.env.RADARR_SERVER_IP || DEFAULT_RADARR_SERVER_IP,
+        apiServerPort: process.env.RADARR_SERVER_PORT || DEFAULT_RADARR_SERVER_PORT,
+        apiKey: process.env.RADARR_API_KEY || DEFAULT_RADARR_API_KEY,
+    },
+    tvshows: {
+        apiServerIP: process.env.SONARR_SERVER_IP || DEFAULT_SONARR_SERVER_IP,
+        apiServerPort: process.env.SONARR_SERVER_PORT || DEFAULT_SONARR_SERVER_PORT,
+        apiKey: process.env.SONARR_API_KEY || DEFAULT_SONARR_API_KEY,
+    },
+    nodeServerPort: process.env.NODE_SERVER_PORT || DEFAULT_SERVER_PORT,
+    enableDriveStatus: (process.env.ENABLE_DRIVE_STATUS || DEFAULT_ENABLE_DRIVE_STATUS).toLowerCase(),
+};
 
 // Middleware to enable CORS
 app.use((req, res, next) => {
@@ -28,6 +53,85 @@ app.use((req, res, next) => {
 
 // Serve static files from the "public" directory
 app.use(express.static('public'));
+
+// Function to fetch root folders from Radarr or Sonarr
+async function fetchRootFolders(apiBaseUrl, apiKey) {
+    try {
+        const response = await axios.get(`${apiBaseUrl}/rootfolder`, {
+            headers: { 'X-Api-Key': apiKey },
+        });
+        return response.data.map(folder => folder.path); // Extract folder paths
+    } catch (error) {
+        console.error('Error fetching root folders:', error.message);
+        return [];
+    }
+}
+
+// Function to get disk space for a given path
+async function getDiskSpace(drivePath) {
+    try {
+        const diskSpace = await checkDiskSpace(drivePath);
+        const used = diskSpace.size - diskSpace.free;
+
+        return {
+            path: drivePath,
+            size: `${(diskSpace.size / 1e9).toFixed(2)} GB`,
+            used: `${(used / 1e9).toFixed(2)} GB`,
+            available: `${(diskSpace.free / 1e9).toFixed(2)} GB`,
+            percentage: Math.round((used / diskSpace.size) * 100),
+        };
+    } catch (error) {
+        console.error(`Failed to get disk space for path "${drivePath}": ${error.message}`);
+        return null;
+    }
+}
+
+app.get('/api/drive-space', async (req, res) => {
+    if (!["true", "yes"].includes(settings.enableDriveStatus)) {
+        return res.status(403).send('Drive status is disabled.');
+    }
+
+    try {
+        const radarrRootFolders = await fetchRootFolders(
+            `http://${settings.movies.apiServerIP}:${settings.movies.apiServerPort}/api/v3`,
+            settings.movies.apiKey
+        );
+        const sonarrRootFolders = await fetchRootFolders(
+            `http://${settings.tvshows.apiServerIP}:${settings.tvshows.apiServerPort}/api/v3`,
+            settings.tvshows.apiKey
+        );
+
+        // Combine and deduplicate folder paths
+        const allFolders = [...new Set([...radarrRootFolders, ...sonarrRootFolders])];
+
+        // Fetch disk space information for each folder
+        const driveSpaces = await Promise.all(
+            allFolders.map(folder => getDiskSpace(folder).catch(() => null))
+        );
+
+        // Filter out any null results
+        const validDriveSpaces = driveSpaces.filter(Boolean);
+
+        // Deduplicate results based on the root drive (e.g., "F:\\")
+        const uniqueDriveSpaces = Object.values(
+            validDriveSpaces.reduce((acc, drive) => {
+                const rootDrive = drive.path.split(':')[0] + ':\\'; // Extract root drive
+                if (!acc[rootDrive]) {
+                    acc[rootDrive] = { 
+                        ...drive, 
+                        path: rootDrive // Update path to show root drive only
+                    };
+                }
+                return acc;
+            }, {})
+        );
+
+        res.json(uniqueDriveSpaces); // Return deduplicated drive space data
+    } catch (error) {
+        console.error('Error in /api/drive-space:', error.message);
+        res.status(500).send('Failed to fetch drive space data');
+    }
+});
 
 // Function to fetch data from the external API
 async function fetchData(type) {
@@ -91,5 +195,6 @@ app.get('/api/queue/downloading', async (req, res) => {
 
 // Start the server
 app.listen(settings.nodeServerPort, () => {
+    console.log(`Drive bar graphs enabled: ${settings.enableDriveStatus}`);
     console.log(`Server running at http://localhost:${settings.nodeServerPort}`);
 });

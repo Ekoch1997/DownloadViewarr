@@ -17,17 +17,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Update HTML Meta Tag
+      - name: Update HTML Meta Tag and package.json Version
         run: |
           VERSION=$(date '+%y.%m.%d')
+          # Update the version in index.html
           sed -i "s/<meta name=\"version\" content=\"[^\"]*\">/<meta name=\"version\" content=\"$VERSION\">/g" public/index.html
+          # Update the version in package.json
+          sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$VERSION\"/g" package.json
 
       - name: Commit Changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/index.html
-          git commit -m "Update version meta tag to $VERSION"
+          git add public/index.html package.json
+          git commit -m "Update version to $VERSION"
           git push
 
       - name: Log in to Docker Hub

@@ -149,6 +149,7 @@ Developed by [pir8radio](https://github.com/pir8radio).
 ## 00-00-0000
 - Cleaned up settings section, gave dedicated settings.
 - Added support for auto generated progress bar style drive information, % Used - Free - etc
+- Changed how we were getting drive capacity, now get it from the radarr or sonarr api, so no need to map drives or anything for docker users.
 
 ## 04-26-2025
 - This should be the last flash update, lol sorry guys, been pushing out features!

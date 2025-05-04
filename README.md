@@ -1,17 +1,18 @@
 
-[![image](https://github.com/user-attachments/assets/a25dba92-84d6-431d-abad-eb0777141d2d)](https://github.com/pir8radio/DownloadViewarr)
-[![Github Visits](https://img.shields.io/endpoint?logo=GitHub&url=https://github-counter.vercel.app/api/visits&query=$.message?)](#) [![Docker Pulls](https://img.shields.io/docker/pulls/pir8radio/downloadviewarr?logo=Docker&logoColor=f5f5f5)](https://hub.docker.com/r/pir8radio/downloadviewarr) [![Github Clones](https://img.shields.io/endpoint?logo=GitHub&url=https://github-counter.vercel.app/api/clones&query=$.message?)](#) [![Reddit Subscribers](https://img.shields.io/reddit/subreddit-subscribers/DownloadViewarr?style=flat&logo=Reddit&logoColor=FFFFFF)](https://www.reddit.com/r/DownloadViewarr)
-
+[![image](https://github.com/user-attachments/assets/96148273-c3fb-4cb3-8003-5a9de2c330d0)](https://github.com/pir8radio/DownloadViewarr)
+<div align="center">
+<a href="#"><img text-align="center" alt="Visits" src="https://img.shields.io/endpoint?logo=GitHub&url=https://github-counter.vercel.app/api/visits&query=$.message?"></a> <a href="https://hub.docker.com/r/pir8radio/downloadviewarr" target="_blank"><img text-align="center" alt="Docker Pulls" src ="https://img.shields.io/docker/pulls/pir8radio/downloadviewarr?logo=Docker&logoColor=f5f5f5"></a> <a href="#"><img text-align="center" alt="Clones" src="https://img.shields.io/endpoint?logo=GitHub&url=https://github-counter.vercel.app/api/clones&query=$.message?"></a> <a href="https://www.reddit.com/r/DownloadViewarr" target="_blank"><img text-align="center" alt="Reddit Subscribers" src="https://img.shields.io/reddit/subreddit-subscribers/DownloadViewarr?style=flat&logo=Reddit&logoColor=FFFFFF"></a>
+</div>
 
 # Download Viewarr
 
 Download Viewarr is a Node.js application designed to fetch and display download queues for [Radarr](https://radarr.video/) and [Sonarr](https://sonarr.tv/). It provides a simple and user-friendly interface to view movies and TV show download queues via a web page.
 
-[![image](https://github.com/user-attachments/assets/c439e054-9d2e-486c-a555-defbf66e912d)](https://github.com/pir8radio/DownloadViewarr)
+<a href="https://github.com/pir8radio/DownloadViewarr" target="_blank"><img src="https://github.com/user-attachments/assets/c439e054-9d2e-486c-a555-defbf66e912d" height="40"></a>
 
 
 ## Docker Image
-[![image](https://github.com/user-attachments/assets/2f17bae4-5dc6-4b7d-83b3-da6b7422a536)](https://hub.docker.com/r/pir8radio/downloadviewarr)
+<a href="https://hub.docker.com/r/pir8radio/downloadviewarr" target="_blank"><img src="https://github.com/user-attachments/assets/2f17bae4-5dc6-4b7d-83b3-da6b7422a536" height="40"></a>
 
 ```html
 docker pull pir8radio/downloadviewarr
@@ -48,8 +49,9 @@ docker pull pir8radio/downloadviewarr
 
 
 - Mobile Device - Embeded in Ombi<br>
+<div align="center">
 <img src="https://github.com/user-attachments/assets/81261ff3-58c1-45d7-9686-ad0324aa8b4f" width="300">
-
+</div>
 
 ## Installation
 

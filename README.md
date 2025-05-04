@@ -54,6 +54,12 @@ docker pull pir8radio/downloadviewarr
 <img src="https://github.com/user-attachments/assets/81261ff3-58c1-45d7-9686-ad0324aa8b4f" width="300">
 </div>
 
+- Media Drive Status (optional)
+<div align="center">
+<img src="https://github.com/user-attachments/assets/36ce7efb-c1a6-4c3e-90b0-f1e29638b604">
+</div>
+
+
 ## Installation
 
 1. Clone the repository:

@@ -144,6 +144,10 @@ Developed by [pir8radio](https://github.com/pir8radio).
 
 
 # Update History
+## 00-00-0000
+- Cleaned up settings section, gave dedicated settings.
+- Added support for auto generated progress bar style drive information, % Used - Free - etc
+
 ## 04-26-2025
 - This should be the last flash update, lol sorry guys, been pushing out features!
 - added tab download indicator to the floating button embed

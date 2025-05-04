@@ -1,6 +1,5 @@
 const express = require('express');
 const axios = require('axios');
-const checkDiskSpace = require('check-disk-space').default;
 const path = require('path');
 const app = express();
 

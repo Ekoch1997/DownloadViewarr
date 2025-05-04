@@ -22,6 +22,7 @@ docker pull pir8radio/downloadviewarr
 ## Features
 
 - Fetches download queue data from Radarr and Sonarr using their APIs.
+- Fetches media drive space info from Radarr or Sonarr APIs.
 - Displays data in an organized format on a web page.
 - Easy to configure and run locally.
 - Can be used by itself, or embeded as an iframe within ombi or some other request app.
@@ -53,6 +54,12 @@ docker pull pir8radio/downloadviewarr
 <img src="https://github.com/user-attachments/assets/81261ff3-58c1-45d7-9686-ad0324aa8b4f" width="300">
 </div>
 
+- Media Drive Status (optional)
+<div align="center">
+<img src="https://github.com/user-attachments/assets/36ce7efb-c1a6-4c3e-90b0-f1e29638b604">
+</div>
+
+
 ## Installation
 
 1. Clone the repository:
@@ -72,20 +79,23 @@ docker pull pir8radio/downloadviewarr
 
 ```javascript
 /*==================================== SETTINGS =====================================*/
-const settings = {
-    movies: {
-        apiServerIP: process.env.RADARR_SERVER_IP || '127.0.0.1',                    // Radarr server IP (Docker: from env var, Native: default to localhost)
-        apiServerPort: process.env.RADARR_SERVER_PORT || 7878,                       // Radarr server port
-        apiKey: process.env.RADARR_API_KEY || '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx',    // Radarr API Key
-    },
-    tvshows: {
-        apiServerIP: process.env.SONARR_SERVER_IP || '127.0.0.1',                    // Sonarr server IP (Docker: from env var, Native: default to localhost)
-        apiServerPort: process.env.SONARR_SERVER_PORT || 8989,                       // Sonarr server port
-        apiKey: process.env.SONARR_API_KEY || '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx',    // Sonarr API Key
-    },
-    nodeServerPort: process.env.NODE_SERVER_PORT || 8888,                            // Port to view download page
-};
+
+// RADARR SERVER SETTINGS
+const DEFAULT_RADARR_SERVER_IP = '127.0.0.1'					// Radarr server IP/URL
+const DEFAULT_RADARR_SERVER_PORT = 7878						// Radarr server port
+const DEFAULT_RADARR_API_KEY = '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx'		// Radarr API Key
+
+// SONARR SERVER SETTINGS
+const DEFAULT_SONARR_SERVER_IP = '127.0.0.1'					// Sonarr server IP/URL
+const DEFAULT_SONARR_SERVER_PORT = 8989						// Sonarr server port
+const DEFAULT_SONARR_API_KEY = '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx'		// Sonarr API Key
+
+// DOWNLOAD VIEWARR SETTINGS
+const DEFAULT_SERVER_PORT = 8888						// Port to view download status page
+const DEFAULT_ENABLE_DRIVE_STATUS = "TRUE"					// True or False - Enable media drive(s) bar graphs.
+
 /*==================================== SETTINGS =====================================*/
+
 ```
 
 4. Start the application:
@@ -143,6 +153,11 @@ Developed by [pir8radio](https://github.com/pir8radio).
 
 
 # Update History
+## 05-04-2025
+- Cleaned up settings section, gave dedicated settings.
+- Added support for auto generated progress bar style drive information, % Used - Free - etc
+- Changed how we were getting drive capacity, now get it from the radarr or sonarr api, so no need to map drives or anything for docker users.
+
 ## 04-26-2025
 - This should be the last flash update, lol sorry guys, been pushing out features!
 - added tab download indicator to the floating button embed

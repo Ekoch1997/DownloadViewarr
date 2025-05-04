@@ -19,7 +19,7 @@ const DEFAULT_SONARR_API_KEY = '1234abcdxxxxxxxxxxxxxxxxxxxxxxxx'		// Sonarr API
 
 // DOWNLOAD VIEWARR SETTINGS
 const DEFAULT_SERVER_PORT = 8888						// Port to view download status page
-const DEFAULT_ENABLE_DRIVE_STATUS = "FALSE"					// True or False - Enable media drive(s) bar graphs.
+const DEFAULT_ENABLE_DRIVE_STATUS = "FALSE"					// True or False - Enable media drive(s) status.
 
 /*==================================== SETTINGS =====================================*/
 
@@ -216,6 +216,6 @@ app.get('/api/queue/downloading', async (req, res) => {
 
 // Start the server
 app.listen(settings.nodeServerPort, () => {
-    console.log(`Drive bar graphs enabled: ${settings.enableDriveStatus}`);
+    console.log(`Drive status enabled: ${settings.enableDriveStatus}`);
     console.log(`Server running at http://localhost:${settings.nodeServerPort}`);
 });

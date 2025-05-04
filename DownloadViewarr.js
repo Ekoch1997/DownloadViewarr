@@ -67,22 +67,14 @@ async function fetchRootFolders(apiBaseUrl, apiKey) {
     }
 }
 
-// Function to get disk space for a given path
-async function getDiskSpace(drivePath) {
+// Function to fetch disk space information from Radarr or Sonarr APIs
+async function fetchDiskSpace(apiBaseUrl, apiKey) {
     try {
-        const diskSpace = await checkDiskSpace(drivePath);
-        const used = diskSpace.size - diskSpace.free;
-
-        return {
-            path: drivePath,
-            size: `${(diskSpace.size / 1e9).toFixed(2)} GB`,
-            used: `${(used / 1e9).toFixed(2)} GB`,
-            available: `${(diskSpace.free / 1e9).toFixed(2)} GB`,
-            percentage: Math.round((used / diskSpace.size) * 100),
-        };
+        const response = await axios.get(`${apiBaseUrl}/diskspace?apikey=${apiKey}`);
+        return response.data; // Return the API response data
     } catch (error) {
-        console.error(`Failed to get disk space for path "${drivePath}": ${error.message}`);
-        return null;
+        console.error(`Error fetching disk space from API: ${error.message}`);
+        return null; // Return null on error
     }
 }
 
@@ -92,6 +84,7 @@ app.get('/api/drive-space', async (req, res) => {
     }
 
     try {
+        // Fetch root folders for Movies and TV Shows
         const radarrRootFolders = await fetchRootFolders(
             `http://${settings.movies.apiServerIP}:${settings.movies.apiServerPort}/api/v3`,
             settings.movies.apiKey
@@ -101,32 +94,61 @@ app.get('/api/drive-space', async (req, res) => {
             settings.tvshows.apiKey
         );
 
-        // Combine and deduplicate folder paths
         const allFolders = [...new Set([...radarrRootFolders, ...sonarrRootFolders])];
 
-        // Fetch disk space information for each folder
-        const driveSpaces = await Promise.all(
-            allFolders.map(folder => getDiskSpace(folder).catch(() => null))
+        // Fetch disk space data from Radarr API first, fallback to Sonarr API if Radarr fails
+        let diskSpaces = await fetchDiskSpace(
+            `http://${settings.movies.apiServerIP}:${settings.movies.apiServerPort}/api/v3`,
+            settings.movies.apiKey
         );
 
-        // Filter out any null results
-        const validDriveSpaces = driveSpaces.filter(Boolean);
+        if (!diskSpaces) {
+            diskSpaces = await fetchDiskSpace(
+                `http://${settings.tvshows.apiServerIP}:${settings.tvshows.apiServerPort}/api/v3`,
+                settings.tvshows.apiKey
+            );
+        }
+
+        if (!diskSpaces) {
+            return res.status(500).send('Failed to fetch disk space data');
+        }
+
+        // Filter disk spaces to only include those with a matching root folder
+        const filteredDiskSpaces = diskSpaces.filter(disk =>
+            allFolders.some(folder => folder.startsWith(disk.path))
+        );
 
         // Deduplicate results based on the root drive (e.g., "F:\\")
         const uniqueDriveSpaces = Object.values(
-            validDriveSpaces.reduce((acc, drive) => {
+            filteredDiskSpaces.reduce((acc, drive) => {
                 const rootDrive = drive.path.split(':')[0] + ':\\'; // Extract root drive
                 if (!acc[rootDrive]) {
                     acc[rootDrive] = { 
-                        ...drive, 
-                        path: rootDrive // Update path to show root drive only
+                        path: rootDrive, 
+                        label: drive.label,
+                        freeSpace: drive.freeSpace,
+                        totalSpace: drive.totalSpace,
                     };
+                } else {
+                    // If already exists, sum up the free and total space
+                    acc[rootDrive].freeSpace += drive.freeSpace;
+                    acc[rootDrive].totalSpace += drive.totalSpace;
                 }
                 return acc;
             }, {})
         );
 
-        res.json(uniqueDriveSpaces); // Return deduplicated drive space data
+        // Format the response
+        const formattedDriveSpaces = uniqueDriveSpaces.map(drive => ({
+            path: drive.path,
+            label: drive.label,
+            freeSpace: `${(drive.freeSpace / 1e9).toFixed(2)} GB`,
+            totalSpace: `${(drive.totalSpace / 1e9).toFixed(2)} GB`,
+            usedSpace: `${((drive.totalSpace - drive.freeSpace) / 1e9).toFixed(2)} GB`,
+            percentageUsed: Math.round(((drive.totalSpace - drive.freeSpace) / drive.totalSpace) * 100)
+        }));
+
+        res.json(formattedDriveSpaces); // Return the formatted drive space data
     } catch (error) {
         console.error('Error in /api/drive-space:', error.message);
         res.status(500).send('Failed to fetch drive space data');

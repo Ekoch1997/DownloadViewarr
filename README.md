@@ -22,6 +22,7 @@ docker pull pir8radio/downloadviewarr
 ## Features
 
 - Fetches download queue data from Radarr and Sonarr using their APIs.
+- Fetches media drive space info from Radarr or Sonarr APIs.
 - Displays data in an organized format on a web page.
 - Easy to configure and run locally.
 - Can be used by itself, or embeded as an iframe within ombi or some other request app.

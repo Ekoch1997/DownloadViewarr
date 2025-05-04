@@ -340,13 +340,11 @@ let runCounter = 0;
 async function fetchDriveSpace() {
     // If "Drive status is disabled." was returned previously, skip execution
     if (driveStatusDisabled) {
-        // console.log("Skipping fetchDriveSpace: Drive status disabled."); // Debug
         return;
     }
 
     // Execute only on first run and when runCounter reaches 0
     if (runCounter > 0) {
-        // console.log(`Skipping this fetch cycle, will recheck drive space in ${runCounter} more cycles`); // Debug
         runCounter--;
         return;
     }
@@ -369,9 +367,10 @@ async function fetchDriveSpace() {
 
             drives.forEach(drive => {
                 // Convert values from GB to TB
-                const sizeTB = (parseFloat(drive.size) / 1024).toFixed(2);
-                const usedTB = (parseFloat(drive.used) / 1024).toFixed(2);
-                const availableTB = (parseFloat(drive.available) / 1024).toFixed(2);
+                const totalTB = (parseFloat(drive.totalSpace) / 1024).toFixed(2);
+                const usedTB = (parseFloat(drive.usedSpace) / 1024).toFixed(2);
+                const availableTB = (parseFloat(drive.freeSpace) / 1024).toFixed(2);
+                const percentage = drive.percentageUsed;
 
                 // Create bar graph section for each drive
                 const driveElement = document.createElement('div');
@@ -381,9 +380,9 @@ async function fetchDriveSpace() {
                     <div class="drive-space-label">${drive.path}</div>
                     <div class="drive-space-progress">
                         <div class="drive-space-progress-bar" 
-                             style="width: ${drive.percentage}%" 
-                             title="${usedTB} TB of ${sizeTB} TB used (${availableTB} TB available)">
-                            <span class="drive-space-text">${drive.percentage}%</span>
+                             style="width: ${percentage}%" 
+                             title="${usedTB} TB of ${totalTB} TB used (${availableTB} TB available)">
+                            <span class="drive-space-text">${percentage}%</span>
                         </div>
                     </div>
                 `;

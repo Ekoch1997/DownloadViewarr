@@ -1,16 +1,19 @@
 :root {
-    --bg-main: #0f172a;          /* Page background */
-    --bg-panel: #111827;         /* Cards / tables */
+    --bg-main: #0f172a;
+    /* Page background */
+    --bg-panel: #111827;
+    /* Cards / tables */
     --bg-row-alt: #0b1220;
     --bg-hover: #1e293b;
 
-    --border-subtle: rgba(255,255,255,0.06);
+    --border-subtle: rgba(255, 255, 255, 0.06);
 
     --text-main: #e5e7eb;
     --text-muted: #9ca3af;
 
-    --accent: #6366f1;           /* Jellyseerr-like indigo */
-    --accent-soft: rgba(99,102,241,0.15);
+    --accent: #6366f1;
+    /* Jellyseerr-like indigo */
+    --accent-soft: rgba(99, 102, 241, 0.15);
 
     --success: #22c55e;
     --warning: #f97316;
@@ -37,7 +40,7 @@ h1 {
 .table-container {
     overflow-x: auto;
     background-color: var(--bg-panel);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     margin: 10px 0px;
 }
 
@@ -48,7 +51,8 @@ table {
     background-color: transparent;
 }
 
-th, td {
+th,
+td {
     padding: 16px 18px;
     text-align: left;
     font-size: 13px;
@@ -84,12 +88,12 @@ tr:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(255,255,255,0.15);
+    background-color: rgba(255, 255, 255, 0.15);
     border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255,255,255,0.25);
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 ::-webkit-scrollbar-track {
@@ -97,7 +101,8 @@ tr:hover {
 }
 
 /* Tab Button Styles (Movies and TV Shows) */
-#moviesButton, #tvShowsButton {
+#moviesButton,
+#tvShowsButton {
     padding: 12px 20px;
     border-radius: 999px;
     font-size: 13px;
@@ -109,12 +114,14 @@ tr:hover {
     transition: all 0.2s ease;
 }
 
-#moviesButton:hover, #tvShowsButton:hover {
+#moviesButton:hover,
+#tvShowsButton:hover {
     background-color: var(--accent-soft);
     color: var(--text-main);
 }
 
-#moviesButton.active, #tvShowsButton.active {
+#moviesButton.active,
+#tvShowsButton.active {
     background-color: var(--accent);
     color: white;
     border-color: var(--accent);
@@ -134,8 +141,10 @@ tr:hover {
 }
 
 /* Ensure parent tabs have relative positioning */
-#moviesButton, #tvShowsButton {
-    position: relative; /* Required for absolute positioning of the bubbles */
+#moviesButton,
+#tvShowsButton {
+    position: relative;
+    /* Required for absolute positioning of the bubbles */
 }
 
 /* Button Styles for Quality and Formats */
@@ -207,14 +216,26 @@ tr:hover {
 }
 
 .drive-space-progress {
-    height: 14px;
-    background-color: rgba(255,255,255,0.08);
-    border-radius: 999px;
+    width: 200px;
+    height: 20px;
+    background-color: #2a2a2a;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 .drive-space-progress-bar {
+    height: 100%;
     background-color: var(--accent);
-    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .drive-space-text {
@@ -228,15 +249,26 @@ tr:hover {
 
 /* Progress Bar */
 .progress {
-    background-color: rgba(255,255,255,0.08);
-    border-radius: 999px;
-    height: 18px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
 }
 
 .progress-bar {
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
+    height: 18px;
+    border-radius: 5px;
+    line-height: 18px;
+    color: white !important;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .progress-bar.downloading {
@@ -272,6 +304,7 @@ tr:hover {
     0% {
         transform: translateX(-100%);
     }
+
     100% {
         transform: translateX(100%);
     }
@@ -319,6 +352,7 @@ tr:hover {
 }
 
 .loader.stopped {
-    animation: none; /* LIVE button animation, if auto refresh doesnt work, live button goes dead so user knows there is stale data */
+    animation: none;
+    /* LIVE button animation, if auto refresh doesnt work, live button goes dead so user knows there is stale data */
     background-color: #333;
 }
